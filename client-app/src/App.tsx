@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Header, List } from 'semantic-ui-react';
+
 import './App.css';
 
 class App extends Component {
@@ -16,10 +18,13 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        {this.state.values.length > 0 && this.state.values[0]["name"]}
-        {this.state.values.length > 0 && this.state.values[1]["name"]}
-        {this.state.values.length > 0 && this.state.values[2]["name"]}
+      <div>
+        <Header as='h2' icon='tree' content='Uptime Guarantee' />
+        <List>
+          <List.Item>{this.state.values.length > 0 && this.state.values[0]["name"]}</List.Item>
+          <List.Item>{this.state.values.length > 0 && this.state.values[1]["name"]}</List.Item>
+          <List.Item>{this.state.values.length > 0 && this.state.values[2]["name"]}</List.Item>
+        </List>
       </div>
     );
   }
