@@ -1,13 +1,12 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain;
 using MediatR;
 using Persistence;
 
 namespace Application.Bonsais
 {
-    public class Create
+    public class Edit
     {
         public class Command : IRequest
         {
@@ -42,17 +41,22 @@ namespace Application.Bonsais
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                var dateFirstPlanted = request.Age == null ? DateTime.MinValue : DateTime.Now.AddYears(request.Age.Value * -1);
+                var bonsai = await _dataContext.Bonsais.FindAsync(request.Id);
 
-                var bonsai = new Bonsai
+                if (bonsai == null)
                 {
-                    Id = request.Id,
-                    Name = request.Name,
-                    Species = request.Species,
-                    DateFirstPlanted = dateFirstPlanted
-                };
+                    throw new Exception("Could not find bonsai");
+                }
 
-                _dataContext.Bonsais.Add(bonsai);
+                bonsai.Name = request.Name ?? bonsai.Name;
+                bonsai.Species = request.Species ?? bonsai.Species;
+
+                if (request.Age != null)
+                {
+                    var newAge = DateTime.Now.AddYears(request.Age.Value * -1);
+                    bonsai.DateFirstPlanted = newAge;
+                }
+
                 var success = await _dataContext.SaveChangesAsync() > 0;
 
                 if (success)
