@@ -18,20 +18,21 @@ namespace Api
         {
             var host = CreateHostBuilder(args).Build();
 
-            MigrateDatabase(host);
+            MigrateAndSeedDatabase(host);
 
             host.Run();
         }
 
-        static void MigrateDatabase(IHost host)
+        static void MigrateAndSeedDatabase(IHost host)
         {
             using(var scope = host.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<DataContext>();
-                    context.Database.Migrate();
+                    var dataContext = services.GetRequiredService<DataContext>();
+                    dataContext.Database.Migrate();
+                    Seed.SeedData(dataContext);
                 }
                 catch (Exception ex)
                 {
