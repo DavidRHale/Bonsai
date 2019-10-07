@@ -1,8 +1,8 @@
-import { observable, action, configure, runInAction } from 'mobx';
+import { observable, action, configure, runInAction, computed } from 'mobx';
 
 import { IBonsai } from '../models/bonsai';
 import agent from '../api/agent';
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent, createContext } from 'react';
 
 configure({ enforceActions: 'always' });
 
@@ -12,6 +12,10 @@ class BonsaiStore {
   @observable loadingInitial = false;
   @observable submitting = false;
   @observable target = '';
+
+  @computed get allBonsais() {
+    return Array.from(this.bonsaiRegistry.values())
+  }
 
   @action loadBonsais = async () => {
     this.loadingInitial = true;
@@ -112,13 +116,13 @@ class BonsaiStore {
     try {
       await agent.Bonsai.delete(id);
 
-      runInAction('delete activity', () => {
+      runInAction('delete bonsai', () => {
         this.bonsaiRegistry.delete(id);
         this.submitting = false;
         this.target = '';
       });
     } catch (error) {
-      runInAction('delete activity error', () => {
+      runInAction('delete bonsai error', () => {
         this.submitting = false;
         this.target = '';
       });
@@ -126,3 +130,5 @@ class BonsaiStore {
     }
   }
 }
+
+export default createContext(new BonsaiStore());
