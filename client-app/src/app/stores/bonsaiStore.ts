@@ -2,6 +2,7 @@ import { observable, action, configure, runInAction } from 'mobx';
 
 import { IBonsai } from '../models/bonsai';
 import agent from '../api/agent';
+import { SyntheticEvent } from 'react';
 
 configure({ enforceActions: 'always' });
 
@@ -10,7 +11,7 @@ class BonsaiStore {
   @observable bonsai: IBonsai | null = null;
   @observable loadingInitial = false;
   @observable submitting = false;
-  // @observable target = '';
+  @observable target = '';
 
   @action loadBonsais = async () => {
     this.loadingInitial = true;
@@ -62,5 +63,66 @@ class BonsaiStore {
 
   @action clearBonsai = () => {
     this.bonsai = null;
+  }
+
+  @action selectBonsai = (id: string) => {
+    this.bonsai = this.bonsaiRegistry.get(id);
+  };
+
+  @action createBonsai = async (bonsai: IBonsai) => {
+    this.submitting = true;
+
+    try {
+      await agent.Bonsai.create(bonsai);
+
+      runInAction('create bonsai', () => {
+        this.bonsaiRegistry.set(bonsai.id, bonsai);
+        this.submitting = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction('create bonsai error', () => {
+        this.submitting = false;
+      });
+    }
+  }
+
+  @action editBonsai = async (bonsai: IBonsai) => {
+    this.submitting = true;
+    try {
+      await agent.Bonsai.update(bonsai);
+
+      runInAction('edit bonsai', () => {
+        this.bonsaiRegistry.set(bonsai.id, bonsai);
+        this.bonsai = bonsai;
+        this.submitting = false;
+      });
+    } catch (error) {
+      console.log(error);
+      runInAction('edit bonsai error', () => {
+        this.submitting = false;
+      });
+    }
+  }
+
+  @action deleteActivity = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
+    this.submitting = true;
+    this.target = event.currentTarget.name;
+
+    try {
+      await agent.Bonsai.delete(id);
+
+      runInAction('delete activity', () => {
+        this.bonsaiRegistry.delete(id);
+        this.submitting = false;
+        this.target = '';
+      });
+    } catch (error) {
+      runInAction('delete activity error', () => {
+        this.submitting = false;
+        this.target = '';
+      });
+      console.log(error);
+    }
   }
 }
