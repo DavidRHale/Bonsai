@@ -9,12 +9,12 @@ namespace Application.Bonsais
 {
     public class Details
     {
-        public class Query : IRequest<Bonsai>
+        public class Query : IRequest<BonsaiDto>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, Bonsai>
+        public class Handler : IRequestHandler<Query, BonsaiDto>
         {
             readonly DataContext _dataContext;
             public Handler(DataContext dataContext)
@@ -22,10 +22,25 @@ namespace Application.Bonsais
                 _dataContext = dataContext;
             }
 
-            public async Task<Bonsai> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<BonsaiDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var bonsai = await _dataContext.Bonsais.FindAsync(request.Id);
-                return bonsai;
+
+                int? age = null;
+                if (bonsai.DateFirstPlanted != DateTime.MinValue)
+                {
+                    age = DateTime.Now.Year - bonsai.DateFirstPlanted.Year;
+                }
+
+                var dto = new BonsaiDto
+                {
+                    Id = bonsai.Id,
+                    Name = bonsai.Name,
+                    Species = bonsai.Species,
+                    Age = age
+                };
+
+                return dto;
             }
         }
 
