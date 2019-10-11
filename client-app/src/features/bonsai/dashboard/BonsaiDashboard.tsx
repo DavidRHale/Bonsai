@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 
 import Loader from '../../../app/layout/Loader';
 import BonsaiStore from '../../../app/stores/bonsaiStore';
+import BonsaiList from './BonsaiList';
 
 const BonsaiDashboard: React.FC = () => {
   const bonsaiStore = useContext(BonsaiStore);
@@ -13,18 +14,13 @@ const BonsaiDashboard: React.FC = () => {
   }, [bonsaiStore]);
 
   if (bonsaiStore.loadingInitial) {
-    return <Loader content='Loading activities...' />;
+    return <Loader content='Loading your bonsai...' />;
   }
 
   return (
     <Grid>
       <Grid.Column width={10}>
-        {/* <ActivityList /> */}
-        {bonsaiStore.allBonsais.map(bonsai => {
-          return (
-            <h1>{bonsai.name}</h1>
-          );
-        })}
+        <BonsaiList />
       </Grid.Column>
       <Grid.Column width={6}>
         {/* <h2>Activity Filters</h2> */}
