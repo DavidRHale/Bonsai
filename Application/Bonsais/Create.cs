@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -17,19 +18,15 @@ namespace Application.Bonsais
             public int? Age { get; set; }
         }
 
-        // TODO: Add Fluent Validation and implement this
-        // public class CommandValidator : AbstractValidator<Command>
-        // {
-        //     public CommandValidator()
-        //     {
-        //         RuleFor(x => x.Title).NotEmpty();
-        //         RuleFor(x => x.Description).NotEmpty();
-        //         RuleFor(x => x.Category).NotEmpty();
-        //         RuleFor(x => x.Date).NotEmpty();
-        //         RuleFor(x => x.City).NotEmpty();
-        //         RuleFor(x => x.Venue).NotEmpty();
-        //     }
-        // }
+        public class CommandValidator : AbstractValidator<Command>
+        {
+            public CommandValidator()
+            {
+                RuleFor(x => x.Name).NotEmpty();
+                RuleFor(x => x.Species).NotEmpty();
+                RuleFor(x => x.Age).NotEmpty();
+            }
+        }
 
         public class Handler : IRequestHandler<Command>
         {
