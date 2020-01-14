@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using Domain;
 using MediatR;
 using Persistence;
@@ -25,6 +27,11 @@ namespace Application.Bonsais
             public async Task<BonsaiDto> Handle(Query request, CancellationToken cancellationToken)
             {
                 var bonsai = await _dataContext.Bonsais.FindAsync(request.Id);
+
+                if (bonsai == null)
+                {
+                    throw new RestException(HttpStatusCode.NotFound, new { bonsai = "Not Found" });
+                }
 
                 int? age = null;
                 if (bonsai.DateFirstPlanted != DateTime.MinValue)

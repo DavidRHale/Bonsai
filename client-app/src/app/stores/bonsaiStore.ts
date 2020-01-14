@@ -52,10 +52,10 @@ class BonsaiStore {
           this.loadingInitial = false;
         });
       } catch (error) {
-        console.log(error);
         runInAction('load bonsai error', () => {
           this.loadingInitial = false;
         });
+        throw (error)
       }
     }
 

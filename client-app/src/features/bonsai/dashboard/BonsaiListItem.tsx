@@ -1,11 +1,12 @@
 import React from 'react'
 import { List } from 'semantic-ui-react';
-import { Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
+import { Link } from 'react-router-dom';
 
 import { IBonsai } from '../../../app/models/bonsai';
+import { detailBonsaiRoute } from '../../../app/layout/appRoutes';
 
-const ActivityListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
+const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
   return (
     <List.Item>
       <List.Content>
@@ -13,9 +14,10 @@ const ActivityListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
         <List.Description>
           {`${bonsai.age} year old ${bonsai.species}`}
         </List.Description>
+        <List.Content><Link to={detailBonsaiRoute(bonsai.id)}>{bonsai.id}</Link></List.Content>
       </List.Content>
     </List.Item>
   );
 }
 
-export default observer(ActivityListItem);
+export default observer(BonsaiListItem);

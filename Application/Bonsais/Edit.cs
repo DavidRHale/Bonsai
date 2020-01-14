@@ -1,6 +1,8 @@
 using System;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Application.Errors;
 using FluentValidation;
 using MediatR;
 using Persistence;
@@ -42,7 +44,7 @@ namespace Application.Bonsais
 
                 if (bonsai == null)
                 {
-                    throw new Exception("Could not find bonsai");
+                    throw new RestException(HttpStatusCode.NotFound, new { bonsai = "Not Found" });
                 }
 
                 bonsai.Name = request.Name ?? bonsai.Name;
