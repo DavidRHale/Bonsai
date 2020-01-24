@@ -1,5 +1,5 @@
 import React from 'react'
-import { List, Segment, Item, Button } from 'semantic-ui-react';
+import { Segment, Item, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
         <span>{`${bonsai.age} year old ${bonsai.species}`}</span>
         <Button
           as={Link}
-          to={`/bonsai/${bonsai.id}`}
+          to={detailBonsaiRoute(bonsai.id)}
           floated='right'
           content='View'
           color='blue'
