@@ -109,7 +109,7 @@ class BonsaiStore {
     }
   }
 
-  @action deleteActivity = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
+  @action deleteBonsai = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
     this.submitting = true;
     this.target = event.currentTarget.name;
 

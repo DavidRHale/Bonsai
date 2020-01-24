@@ -1,12 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Segment, Item, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 
+import BonsaiStore from '../../../app/stores/bonsaiStore';
 import { IBonsai } from '../../../app/models/bonsai';
 import { detailBonsaiRoute } from '../../../app/layout/appRoutes';
 
 const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
+
+  const bonsaiStore = useContext(BonsaiStore);
+  const { deleteBonsai } = bonsaiStore;
+
   return (
     <Segment.Group>
       <Segment>
@@ -30,6 +35,12 @@ const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
           floated='right'
           content='View'
           color='blue'
+        />
+        <Button
+          onClick={event => deleteBonsai(event, bonsai.id)}
+          floated='right'
+          content='Delete'
+          color='red'
         />
       </Segment>
     </Segment.Group>
