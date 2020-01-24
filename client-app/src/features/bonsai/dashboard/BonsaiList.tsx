@@ -9,6 +9,7 @@ const BonsaiList: React.FC = () => {
   const bonsaiStore = useContext(BonsaiStore);
   const { allBonsais } = bonsaiStore;
 
+  // TODO: List bonsai by species category to filter on
   return (
     <List>
       {allBonsais.map((bonsai) => (

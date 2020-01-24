@@ -1,5 +1,5 @@
 import React from 'react'
-import { List } from 'semantic-ui-react';
+import { List, Segment, Item, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 
@@ -8,15 +8,31 @@ import { detailBonsaiRoute } from '../../../app/layout/appRoutes';
 
 const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
   return (
-    <List.Item>
-      <List.Content>
-        <List.Header>{bonsai.name}</List.Header>
-        <List.Description>
-          {`${bonsai.age} year old ${bonsai.species}`}
-        </List.Description>
-        <List.Content><Link to={detailBonsaiRoute(bonsai.id)}>{bonsai.id}</Link></List.Content>
-      </List.Content>
-    </List.Item>
+    <Segment.Group>
+      <Segment>
+        <Item.Group>
+          <Item>
+            <Item.Image size='tiny' circular src='/assets/user.png' />
+            <Item.Content>
+              <Item.Header as='a'>{bonsai.name}</Item.Header>
+              <Item.Description>
+                {bonsai.species}
+              </Item.Description>
+            </Item.Content>
+          </Item>
+        </Item.Group>
+      </Segment>
+      <Segment clearing>
+        <span>{`${bonsai.age} year old ${bonsai.species}`}</span>
+        <Button
+          as={Link}
+          to={`/bonsai/${bonsai.id}`}
+          floated='right'
+          content='View'
+          color='blue'
+        />
+      </Segment>
+    </Segment.Group>
   );
 }
 

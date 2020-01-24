@@ -23,7 +23,7 @@ const BonsaiDashboard: React.FC = () => {
         <BonsaiList />
       </Grid.Column>
       <Grid.Column width={6}>
-        {/* <h2>Activity Filters</h2> */}
+        <h2>Bonsai Filters</h2>
       </Grid.Column>
     </Grid>
   )
