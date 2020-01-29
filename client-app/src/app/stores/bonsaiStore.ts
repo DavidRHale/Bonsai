@@ -3,6 +3,9 @@ import { observable, action, configure, runInAction, computed } from 'mobx';
 import { IBonsai } from '../models/bonsai';
 import agent from '../api/agent';
 import { SyntheticEvent, createContext } from 'react';
+import { detailBonsaiRoute } from '../layout/appRoutes';
+import { history } from '../..';
+import { toast } from 'react-toastify';
 
 configure({ enforceActions: 'always' });
 
@@ -42,6 +45,7 @@ class BonsaiStore {
 
     if (bonsai) {
       this.bonsai = bonsai;
+      return bonsai; // return non-observable to prevent excessive calls of useEffect
     } else {
       this.loadingInitial = true;
 
@@ -51,6 +55,7 @@ class BonsaiStore {
           this.bonsai = bonsai;
           this.loadingInitial = false;
         });
+        return bonsai; // return non-observable to prevent excessive calls of useEffect
       } catch (error) {
         runInAction('load bonsai error', () => {
           this.loadingInitial = false;
@@ -83,11 +88,15 @@ class BonsaiStore {
         this.bonsaiRegistry.set(bonsai.id, bonsai);
         this.submitting = false;
       });
+
+      history.push(detailBonsaiRoute(bonsai.id));
     } catch (error) {
-      console.log(error);
       runInAction('create bonsai error', () => {
         this.submitting = false;
       });
+
+      toast.error('Problem submitting data');
+      console.log(error.response);
     }
   }
 
@@ -101,11 +110,15 @@ class BonsaiStore {
         this.bonsai = bonsai;
         this.submitting = false;
       });
+
+      history.push(detailBonsaiRoute(bonsai.id));
     } catch (error) {
-      console.log(error);
       runInAction('edit bonsai error', () => {
         this.submitting = false;
       });
+
+      toast.error('Problem submitting data');
+      console.log(error);
     }
   }
 

@@ -3,7 +3,7 @@ import { Menu, Container, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { NavLink } from 'react-router-dom';
 
-import { ADD_BONSAI_ROUTE } from '../../app/layout/appRoutes';
+import { CREATE_BONSAI_ROUTE } from '../../app/layout/appRoutes';
 
 const NavBar: React.FC = () => {
   return (
@@ -16,7 +16,7 @@ const NavBar: React.FC = () => {
           </Menu.Item>
           <Menu.Item name='Bonsai' as={NavLink} to='/bonsai' />
           <Menu.Item>
-            <Button positive content="Add a Bonsai" as={NavLink} to={ADD_BONSAI_ROUTE} />
+            <Button positive content="Add a Bonsai" as={NavLink} to={CREATE_BONSAI_ROUTE} />
           </Menu.Item>
         </Container>
       </Menu>

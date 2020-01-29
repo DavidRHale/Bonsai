@@ -7,9 +7,10 @@ import { ToastContainer } from 'react-toastify';
 import NavBar from '../../features/nav/NavBar';
 import HomePage from '../../features/home/HomePage';
 import BonsaiDashboard from '../../features/bonsai/dashboard/BonsaiDashboard';
-import { LIST_BONSAI_ROUTE, DETAIL_BONSAI_ROUTE } from './appRoutes';
+import { LIST_BONSAI_ROUTE, DETAIL_BONSAI_ROUTE, MANAGE_ROUTE, CREATE_BONSAI_ROUTE } from './appRoutes';
 import NotFound from './NotFound';
 import BonsaiDetails from '../../features/bonsai/details/BonsaiDetails';
+import BonsaiForm from '../../features/bonsai/form/BonsaiForm';
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   return (
@@ -26,7 +27,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
               <Switch>
                 <Route exact path={LIST_BONSAI_ROUTE} component={BonsaiDashboard} />
                 <Route exact path={DETAIL_BONSAI_ROUTE} component={BonsaiDetails} />
-                {/* <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />  */}
+                <Route key={location.key} path={[CREATE_BONSAI_ROUTE, MANAGE_ROUTE]} component={BonsaiForm} />
                 <Route component={NotFound} />
               </Switch>
             </Container>
