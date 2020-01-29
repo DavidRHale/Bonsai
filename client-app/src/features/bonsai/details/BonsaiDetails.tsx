@@ -1,9 +1,11 @@
 import React, { useContext, useEffect } from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Link } from 'react-router-dom';
 
 import BonsaiStore from '../../../app/stores/bonsaiStore';
 import Loader from '../../../app/layout/Loader';
 import { observer } from 'mobx-react-lite';
+import { Button } from 'semantic-ui-react';
+import { manageRoute } from '../../../app/layout/appRoutes';
 
 interface DetailParams {
   id: string
@@ -28,6 +30,14 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
   return (
     <div>
       <h1>{bonsai.name}</h1>
+      <Button
+        as={Link}
+        to={manageRoute(bonsai.id)}
+        color='orange'
+        floated='right'
+      >
+        Manage Bonsai
+      </Button>
     </div>
   )
 }

@@ -42,16 +42,19 @@ const BonsaiForm: React.FC<RouteComponentProps<FormParams>> = ({ match, history 
   }, [loadBonsai, match.params.id]);
 
   const handleFinalFormSubmit = (values: any) => {
+    const formBonsai = {
+      ...values,
+      age: +values.age
+    };
+
     if (!values.id) {
-      console.log(values)
       const newBonsai = {
-        ...values,
-        age: +values.age,
+        ...formBonsai,
         id: uuid()
       };
       createBonsai(newBonsai);
     } else {
-      editBonsai(values);
+      editBonsai(formBonsai);
     }
   }
 
