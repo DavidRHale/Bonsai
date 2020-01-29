@@ -8,7 +8,6 @@ import { IBonsai } from '../../../app/models/bonsai';
 import { detailBonsaiRoute } from '../../../app/layout/appRoutes';
 
 const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
-
   const bonsaiStore = useContext(BonsaiStore);
   const { deleteBonsai } = bonsaiStore;
 

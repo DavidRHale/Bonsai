@@ -50,7 +50,7 @@ namespace Api
             });
 
             services
-                .AddMvc()
+                .AddControllers()
                 .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>());
         }
 

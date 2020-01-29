@@ -55,7 +55,7 @@ class BonsaiStore {
         runInAction('load bonsai error', () => {
           this.loadingInitial = false;
         });
-        throw (error)
+        console.log(error);
       }
     }
 
