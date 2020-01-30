@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Domain;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,9 +32,10 @@ namespace Api
                 var services = scope.ServiceProvider;
                 try
                 {
+                    var userManager = services.GetRequiredService<UserManager<AppUser>>();
                     var dataContext = services.GetRequiredService<DataContext>();
                     dataContext.Database.Migrate();
-                    Seed.SeedData(dataContext);
+                    Seed.SeedData(dataContext, userManager).Wait();
                 }
                 catch (Exception ex)
                 {
