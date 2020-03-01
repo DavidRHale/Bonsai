@@ -5,12 +5,12 @@ import { Form as FinalForm, Field } from 'react-final-form';
 import { combineValidators, isRequired, isNumeric, composeValidators } from 'revalidate';
 
 import { BonsaiFormValues } from '../../../app/models/bonsai';
-import BonsaiStore from '../../../app/stores/bonsaiStore';
 import { observer } from 'mobx-react-lite';
 import { RouteComponentProps } from 'react-router';
 import TextInput from '../../../app/common/form/TextInput';
 
 import { detailBonsaiRoute, LIST_BONSAI_ROUTE } from '../../../app/layout/appRoutes';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const validate = combineValidators({
   name: isRequired('Name'),
@@ -26,8 +26,8 @@ interface FormParams {
 }
 
 const BonsaiForm: React.FC<RouteComponentProps<FormParams>> = ({ match, history }) => {
-  const bonsaiStore = useContext(BonsaiStore);
-  const { createBonsai, editBonsai, submitting, loadBonsai } = bonsaiStore;
+  const rootStore = useContext(RootStoreContext);
+  const { createBonsai, editBonsai, submitting, loadBonsai } = rootStore.bonsaiStore;
 
   const [bonsai, setBonsai] = useState(new BonsaiFormValues());
   const [loading, setLoading] = useState(false);

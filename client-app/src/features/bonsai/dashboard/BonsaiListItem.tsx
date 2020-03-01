@@ -3,13 +3,13 @@ import { Segment, Item, Button } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 
-import BonsaiStore from '../../../app/stores/bonsaiStore';
 import { IBonsai } from '../../../app/models/bonsai';
 import { detailBonsaiRoute } from '../../../app/layout/appRoutes';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
-  const bonsaiStore = useContext(BonsaiStore);
-  const { deleteBonsai } = bonsaiStore;
+  const rootStore = useContext(RootStoreContext);
+  const { deleteBonsai } = rootStore.bonsaiStore;
 
   return (
     <Segment.Group>

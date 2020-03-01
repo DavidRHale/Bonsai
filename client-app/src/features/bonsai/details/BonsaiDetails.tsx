@@ -1,19 +1,19 @@
 import React, { useContext, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
 
-import BonsaiStore from '../../../app/stores/bonsaiStore';
 import Loader from '../../../app/layout/Loader';
 import { observer } from 'mobx-react-lite';
 import { Button } from 'semantic-ui-react';
 import { manageRoute } from '../../../app/layout/appRoutes';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 
 interface DetailParams {
   id: string
 }
 
 const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, history }) => {
-  const bonsaiStore = useContext(BonsaiStore);
-  const { bonsai, loadBonsai, loadingInitial } = bonsaiStore;
+  const rootStore = useContext(RootStoreContext);
+  const { bonsai, loadBonsai, loadingInitial } = rootStore.bonsaiStore;
 
   useEffect(() => {
     loadBonsai(match.params.id)

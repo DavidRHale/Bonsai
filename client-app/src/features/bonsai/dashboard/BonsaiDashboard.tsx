@@ -3,17 +3,18 @@ import { Grid } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 
 import Loader from '../../../app/layout/Loader';
-import BonsaiStore from '../../../app/stores/bonsaiStore';
+import { RootStoreContext } from '../../../app/stores/rootStore';
 import BonsaiList from './BonsaiList';
 
 const BonsaiDashboard: React.FC = () => {
-  const bonsaiStore = useContext(BonsaiStore);
+  const rootStore = useContext(RootStoreContext);
+  const { loadBonsais, loadingInitial } = rootStore.bonsaiStore;
 
   useEffect(() => {
-    bonsaiStore.loadBonsais();
-  }, [bonsaiStore]);
+    loadBonsais();
+  }, [loadBonsais]);
 
-  if (bonsaiStore.loadingInitial) {
+  if (loadingInitial) {
     return <Loader content='Loading your bonsai...' />;
   }
 

@@ -1,15 +1,20 @@
-import { observable, action, configure, runInAction, computed } from 'mobx';
+import { observable, action, runInAction, computed } from 'mobx';
 
 import { IBonsai } from '../models/bonsai';
 import agent from '../api/agent';
-import { SyntheticEvent, createContext } from 'react';
+import { SyntheticEvent } from 'react';
 import { detailBonsaiRoute } from '../layout/appRoutes';
 import { history } from '../..';
 import { toast } from 'react-toastify';
+import { RootStore } from './rootStore';
 
-configure({ enforceActions: 'always' });
+export default class BonsaiStore {
+  rootStore: RootStore;
 
-class BonsaiStore {
+  constructor(rootStore: RootStore) {
+    this.rootStore = rootStore;
+  }
+
   @observable bonsaiRegistry = new Map();
   @observable bonsai: IBonsai | null = null;
   @observable loadingInitial = false;
@@ -143,5 +148,3 @@ class BonsaiStore {
     }
   }
 }
-
-export default createContext(new BonsaiStore());
