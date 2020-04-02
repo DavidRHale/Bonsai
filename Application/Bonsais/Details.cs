@@ -3,8 +3,11 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
+using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Bonsais
@@ -19,9 +22,14 @@ namespace Application.Bonsais
         public class Handler : IRequestHandler<Query, BonsaiDto>
         {
             readonly DataContext _dataContext;
-            public Handler(DataContext dataContext)
+            readonly IMapper _mapper;
+            readonly IUserAccessor _userAccessor;
+
+            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _dataContext = dataContext;
+                _mapper = mapper;
             }
 
             public async Task<BonsaiDto> Handle(Query request, CancellationToken cancellationToken)
@@ -33,19 +41,20 @@ namespace Application.Bonsais
                     throw new RestException(HttpStatusCode.NotFound, new { bonsai = "Not Found" });
                 }
 
-                int? age = null;
-                if (bonsai.DateFirstPlanted != DateTime.MinValue)
+                var user = await _userAccessor.GetCurrentUserAsync();
+
+                if (user == null || bonsai.AppUserId != user.Id)
                 {
-                    age = DateTime.Now.Year - bonsai.DateFirstPlanted.Year;
+                    throw new RestException(HttpStatusCode.Unauthorized, new { user = "Unauthorized" });
                 }
 
-                var dto = new BonsaiDto
-                {
-                    Id = bonsai.Id,
-                    Name = bonsai.Name,
-                    Species = bonsai.Species,
-                    Age = age
-                };
+                // int? age = null;
+                // if (bonsai.DateFirstPlanted != DateTime.MinValue)
+                // {
+                //     age = DateTime.Now.Year - bonsai.DateFirstPlanted.Year;
+                // }
+
+                var dto = _mapper.Map<Bonsai, BonsaiDto>(bonsai);
 
                 return dto;
             }

@@ -89,6 +89,9 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
                     b.Property<DateTime>("DateFirstPlanted")
                         .HasColumnType("TEXT");
 
@@ -99,6 +102,8 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
 
                     b.ToTable("Bonsais");
                 });
@@ -229,6 +234,13 @@ namespace Persistence.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Domain.Bonsai", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("Bonsais")
+                        .HasForeignKey("AppUserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

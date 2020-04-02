@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Errors;
+using Application.Interfaces;
 using MediatR;
 using Persistence;
 
@@ -18,8 +19,11 @@ namespace Application.Bonsais
         public class Handler : IRequestHandler<Command>
         {
             readonly DataContext _dataContext;
-            public Handler(DataContext dataContext)
+            readonly IUserAccessor _userAccessor;
+
+            public Handler(DataContext dataContext, IUserAccessor userAccessor)
             {
+                _userAccessor = userAccessor;
                 _dataContext = dataContext;
             }
 
@@ -30,6 +34,13 @@ namespace Application.Bonsais
                 if (bonsai == null)
                 {
                     throw new RestException(HttpStatusCode.NotFound, new { bonsai = "Not Found" });
+                }
+
+                var user = await _userAccessor.GetCurrentUserAsync();
+
+                if (user == null || bonsai.AppUserId != user.Id)
+                {
+                    throw new RestException(HttpStatusCode.Unauthorized, new { user = "Unauthorized" });
                 }
 
                 _dataContext.Remove(bonsai);

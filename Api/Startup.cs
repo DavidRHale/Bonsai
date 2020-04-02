@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Api.Middleware;
 using Application.Bonsais;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentValidation.AspNetCore;
 using Infrastructure.Security;
@@ -42,10 +43,13 @@ namespace Api
 
             services.AddDbContext<DataContext>(opt =>
             {
+                opt.UseLazyLoadingProxies();
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddMediatR(typeof(List.Handler).Assembly);
+
+            services.AddAutoMapper(typeof(List.Handler));
 
             services.AddCors(opt =>
             {
