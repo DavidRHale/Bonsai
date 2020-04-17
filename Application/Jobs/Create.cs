@@ -1,73 +1,80 @@
-// using System;
-// using System.Linq;
-// using System.Threading;
-// using System.Threading.Tasks;
-// using Application.Interfaces;
-// using Domain;
-// using FluentValidation;
-// using MediatR;
-// using Microsoft.EntityFrameworkCore;
-// using Persistence;
+using System;
+using System.Net;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Errors;
+using Application.Interfaces;
+using Domain;
+using Domain.Enums;
+using FluentValidation;
+using MediatR;
+using Persistence;
 
-// namespace Application.Jobs
-// {
-//     public class Create
-//     {
-//         public class Command : IRequest
-//         {
-//             public Guid Id { get; set; }
-//             public DateTime DueBy { get; set; }
-//             public string Species { get; set; }
-//             public int? Age { get; set; }
-//         }
+namespace Application.Jobs
+{
+  public class Create
+  {
+    public class Command : IRequest
+    {
+      public Guid Id { get; set; }
+      public JobType JobType { get; set; }
+      public DateTime DueBy { get; set; }
+      public Guid BonsaiId { get; set; }
+    }
 
-//         public class CommandValidator : AbstractValidator<Command>
-//         {
-//             public CommandValidator()
-//             {
-//                 RuleFor(x => x.Name).NotEmpty();
-//                 RuleFor(x => x.Species).NotEmpty();
-//                 RuleFor(x => x.Age).NotEmpty();
-//             }
-//         }
+    public class CommandValidator : AbstractValidator<Command>
+    {
+      public CommandValidator()
+      {
+        RuleFor(x => x.JobType).NotEmpty();
+        RuleFor(x => x.DueBy).NotEmpty();
+        RuleFor(x => x.BonsaiId).NotEmpty();
+      }
+    }
 
-//         public class Handler : IRequestHandler<Command>
-//         {
-//             readonly DataContext _dataContext;
-//             readonly IUserAccessor _userAccessor;
+    public class Handler : IRequestHandler<Command>
+    {
+      readonly DataContext _dataContext;
+      readonly IUserAccessor _userAccessor;
 
-//             public Handler(DataContext dataContext, IUserAccessor userAccessor)
-//             {
-//                 _userAccessor = userAccessor;
-//                 _dataContext = dataContext;
-//             }
+      public Handler(DataContext dataContext, IUserAccessor userAccessor)
+      {
+        _userAccessor = userAccessor;
+        _dataContext = dataContext;
+      }
 
-//             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
-//             {
-//                 var user = await _userAccessor.GetCurrentUserAsync();
+      public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+      {
+        var user = await _userAccessor.GetCurrentUserAsync();
 
-//                 var dateFirstPlanted = request.Age == null ? DateTime.MinValue : DateTime.Now.AddYears(request.Age.Value * -1);
+        var bonsai = await _dataContext.Bonsais.FindAsync(request.BonsaiId);
 
-//                 var bonsai = new Bonsai
-//                 {
-//                     Id = request.Id,
-//                     Name = request.Name,
-//                     Species = request.Species,
-//                     DateFirstPlanted = dateFirstPlanted,
-//                     AppUser = user,
-//                     AppUserId = user.Id
-//                 };
+        if (bonsai == null)
+        {
+          throw new RestException(HttpStatusCode.NotFound, new { Bonsai = "Not found" });
+        }
 
-//                 _dataContext.Bonsais.Add(bonsai);
-//                 var success = await _dataContext.SaveChangesAsync() > 0;
+        var job = new Job
+        {
+          Id = request.Id,
+          JobType = request.JobType,
+          DueBy = request.DueBy,
+          Bonsai = bonsai,
+          BonsaiId = request.BonsaiId,
+          AppUser = user,
+          AppUserId = user.Id
+        };
 
-//                 if (success)
-//                 {
-//                     return Unit.Value;
-//                 }
+        _dataContext.Jobs.Add(job);
+        var success = await _dataContext.SaveChangesAsync() > 0;
 
-//                 throw new Exception("Problem saving changes");
-//             }
-//         }
-//     }
-// }
+        if (success)
+        {
+          return Unit.Value;
+        }
+
+        throw new Exception("Problem saving changes");
+      }
+    }
+  }
+}
