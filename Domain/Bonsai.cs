@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Domain
 {
@@ -11,5 +12,7 @@ namespace Domain
 
         public string AppUserId { get; set; }
         public virtual AppUser AppUser { get; set; }
+
+        public virtual ICollection<Job> Jobs { get; set; }
     }
 }
