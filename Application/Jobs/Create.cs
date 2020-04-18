@@ -19,6 +19,7 @@ namespace Application.Jobs
       public Guid Id { get; set; }
       public JobType JobType { get; set; }
       public DateTime DueBy { get; set; }
+      public string CustomName { get; set; }
       public Guid BonsaiId { get; set; }
     }
 
@@ -59,6 +60,7 @@ namespace Application.Jobs
           Id = request.Id,
           JobType = request.JobType,
           DueBy = request.DueBy,
+          CustomName = request.CustomName,
           Bonsai = bonsai,
           BonsaiId = request.BonsaiId,
           AppUser = user,
