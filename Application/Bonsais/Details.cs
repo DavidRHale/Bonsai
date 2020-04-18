@@ -2,12 +2,10 @@ using System;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Errors;
 using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Bonsais
@@ -19,34 +17,14 @@ namespace Application.Bonsais
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, BonsaiDto>
+        public class Handler : RequestHandlerBase, IRequestHandler<Query, BonsaiDto>
         {
-            readonly DataContext _dataContext;
-            readonly IMapper _mapper;
-            readonly IUserAccessor _userAccessor;
-
-            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor)
-            {
-                _userAccessor = userAccessor;
-                _dataContext = dataContext;
-                _mapper = mapper;
-            }
+            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor) : base(dataContext, mapper, userAccessor) { }
 
             public async Task<BonsaiDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var bonsai = await _dataContext.Bonsais.FindAsync(request.Id);
-
-                if (bonsai == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound, new { bonsai = "Not Found" });
-                }
-
-                var user = await _userAccessor.GetCurrentUserAsync();
-
-                if (user == null || bonsai.AppUserId != user.Id)
-                {
-                    throw new RestException(HttpStatusCode.Unauthorized, new { user = "Unauthorized" });
-                }
+                var bonsai = await GetBonsaiAsync(request.Id);
+                await CheckEntityIsOwnedByCurrentUser(bonsai);
 
                 var dto = _mapper.Map<Bonsai, BonsaiDto>(bonsai);
 

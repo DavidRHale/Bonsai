@@ -15,23 +15,14 @@ namespace Application.Bonsais
     {
         public class Query : IRequest<List<BonsaiDto>> { }
 
-        public class Handler : IRequestHandler<Query, List<BonsaiDto>>
+        public class Handler : RequestHandlerBase, IRequestHandler<Query, List<BonsaiDto>>
         {
-            readonly DataContext _context;
-            readonly IMapper _mapper;
-            readonly IUserAccessor _userAccessor;
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
-            {
-                _userAccessor = userAccessor;
-                _mapper = mapper;
-                _context = context;
-            }
+            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor) : base(dataContext, mapper, userAccessor) { }
 
             public async Task<List<BonsaiDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _userAccessor.GetCurrentUserAsync();
-                var bonsais = await _context
+                var bonsais = await _dataContext
                     .Bonsais
                     .Where(b => b.AppUserId == user.Id)
                     .ToListAsync();

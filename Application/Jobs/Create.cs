@@ -1,9 +1,8 @@
 using System;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using Application.Errors;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using Domain.Enums;
 using FluentValidation;
@@ -33,27 +32,15 @@ namespace Application.Jobs
       }
     }
 
-    public class Handler : IRequestHandler<Command>
+    public class Handler : RequestHandlerBase, IRequestHandler<Command>
     {
-      readonly DataContext _dataContext;
-      readonly IUserAccessor _userAccessor;
-
-      public Handler(DataContext dataContext, IUserAccessor userAccessor)
-      {
-        _userAccessor = userAccessor;
-        _dataContext = dataContext;
-      }
+      public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor) : base(dataContext, mapper, userAccessor) { }
 
       public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
       {
         var user = await _userAccessor.GetCurrentUserAsync();
 
-        var bonsai = await _dataContext.Bonsais.FindAsync(request.BonsaiId);
-
-        if (bonsai == null)
-        {
-          throw new RestException(HttpStatusCode.NotFound, new { Bonsai = "Not found" });
-        }
+        var bonsai = await GetBonsaiAsync(request.BonsaiId);
 
         var job = new Job
         {
@@ -68,14 +55,8 @@ namespace Application.Jobs
         };
 
         _dataContext.Jobs.Add(job);
-        var success = await _dataContext.SaveChangesAsync() > 0;
-
-        if (success)
-        {
-          return Unit.Value;
-        }
-
-        throw new Exception("Problem saving changes");
+        await SaveChangesAsync();
+        return Unit.Value;
       }
     }
   }

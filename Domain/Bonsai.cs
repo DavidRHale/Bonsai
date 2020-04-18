@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Domain.Interfaces;
 
 namespace Domain
 {
-    public class Bonsai
+    public class Bonsai : IUserOwned
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -15,23 +15,14 @@ namespace Application.Jobs
     {
         public class Query : IRequest<List<JobDto>> { }
 
-        public class Handler : IRequestHandler<Query, List<JobDto>>
+        public class Handler : RequestHandlerBase, IRequestHandler<Query, List<JobDto>>
         {
-            readonly DataContext _context;
-            readonly IMapper _mapper;
-            readonly IUserAccessor _userAccessor;
-
-            public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
-            {
-                _userAccessor = userAccessor;
-                _mapper = mapper;
-                _context = context;
-            }
+            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor) : base(dataContext, mapper, userAccessor) { }
 
             public async Task<List<JobDto>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _userAccessor.GetCurrentUserAsync();
-                var jobs = await _context
+                var jobs = await _dataContext
                     .Jobs
                     .Where(j => j.AppUserId == user.Id)
                     .ToListAsync();

@@ -1,9 +1,10 @@
 using System;
 using Domain.Enums;
+using Domain.Interfaces;
 
 namespace Domain
 {
-    public class Job
+    public class Job : IUserOwned
     {
         public Guid Id { get; set; }
         public JobType JobType { get; set; }

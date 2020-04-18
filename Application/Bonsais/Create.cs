@@ -1,12 +1,11 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Bonsais
@@ -31,16 +30,10 @@ namespace Application.Bonsais
             }
         }
 
-        public class Handler : IRequestHandler<Command>
+        public class Handler : RequestHandlerBase, IRequestHandler<Command>
         {
-            readonly DataContext _dataContext;
-            readonly IUserAccessor _userAccessor;
-
-            public Handler(DataContext dataContext, IUserAccessor userAccessor)
-            {
-                _userAccessor = userAccessor;
-                _dataContext = dataContext;
-            }
+            public Handler(DataContext dataContext, IMapper mapper, IUserAccessor userAccessor) : base(dataContext, mapper, userAccessor)
+            { }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
@@ -59,14 +52,8 @@ namespace Application.Bonsais
                 };
 
                 _dataContext.Bonsais.Add(bonsai);
-                var success = await _dataContext.SaveChangesAsync() > 0;
-
-                if (success)
-                {
-                    return Unit.Value;
-                }
-
-                throw new Exception("Problem saving changes");
+                await SaveChangesAsync();
+                return Unit.Value;
             }
         }
     }
