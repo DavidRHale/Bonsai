@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Application.Jobs;
@@ -12,6 +13,12 @@ namespace Api.Controllers
         public async Task<ActionResult<List<JobDto>>> List()
         {
             return await Mediator.Send(new List.Query());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<JobDto>> Details(Guid id)
+        {
+            return await Mediator.Send(new Details.Query { Id = id });
         }
 
         [HttpPost]

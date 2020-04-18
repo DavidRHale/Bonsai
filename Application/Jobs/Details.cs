@@ -7,19 +7,18 @@ using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Bonsais
+namespace Application.Jobs
 {
     public class Details
     {
-        public class Query : IRequest<BonsaiDto>
+        public class Query : IRequest<JobDto>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, BonsaiDto>
+        public class Handler : IRequestHandler<Query, JobDto>
         {
             readonly DataContext _dataContext;
             readonly IMapper _mapper;
@@ -32,27 +31,24 @@ namespace Application.Bonsais
                 _mapper = mapper;
             }
 
-            public async Task<BonsaiDto> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<JobDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var bonsai = await _dataContext.Bonsais.FindAsync(request.Id);
+                var job = await _dataContext.Jobs.FindAsync(request.Id);
 
-                if (bonsai == null)
+                if (job == null)
                 {
-                    throw new RestException(HttpStatusCode.NotFound, new { bonsai = "Not Found" });
+                    throw new RestException(HttpStatusCode.NotFound, new { job = "Not Found" });
                 }
 
                 var user = await _userAccessor.GetCurrentUserAsync();
 
-                if (user == null || bonsai.AppUserId != user.Id)
+                if (user == null || job.AppUserId != user.Id)
                 {
                     throw new RestException(HttpStatusCode.Unauthorized, new { user = "Unauthorized" });
                 }
 
-                var dto = _mapper.Map<Bonsai, BonsaiDto>(bonsai);
-
-                return dto;
+                return _mapper.Map<Job, JobDto>(job);
             }
         }
-
     }
 }
