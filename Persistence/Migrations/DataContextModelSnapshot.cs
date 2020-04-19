@@ -92,9 +92,6 @@ namespace Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DateFirstPlanted")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 

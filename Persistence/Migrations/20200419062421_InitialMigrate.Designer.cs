@@ -9,8 +9,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20200301120032_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200419062421_InitialMigrate")]
+    partial class InitialMigrate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -94,9 +94,6 @@ namespace Persistence.Migrations
                     b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("DateFirstPlanted")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
@@ -108,6 +105,36 @@ namespace Persistence.Migrations
                     b.HasIndex("AppUserId");
 
                     b.ToTable("Bonsais");
+                });
+
+            modelBuilder.Entity("Domain.Job", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("AppUserId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("BonsaiId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CustomName")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DueBy")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("JobType")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.HasIndex("BonsaiId");
+
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -243,6 +270,19 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.AppUser", "AppUser")
                         .WithMany("Bonsais")
                         .HasForeignKey("AppUserId");
+                });
+
+            modelBuilder.Entity("Domain.Job", b =>
+                {
+                    b.HasOne("Domain.AppUser", "AppUser")
+                        .WithMany("Jobs")
+                        .HasForeignKey("AppUserId");
+
+                    b.HasOne("Domain.Bonsai", "Bonsai")
+                        .WithMany("Jobs")
+                        .HasForeignKey("BonsaiId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

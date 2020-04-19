@@ -27,7 +27,6 @@ const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
         </Item.Group>
       </Segment>
       <Segment clearing>
-        <span>{`${bonsai.age} year old ${bonsai.species}`}</span>
         <Button
           as={Link}
           to={detailBonsaiRoute(bonsai.id)}

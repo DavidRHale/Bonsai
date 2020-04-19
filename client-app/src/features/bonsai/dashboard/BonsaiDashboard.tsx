@@ -20,11 +20,8 @@ const BonsaiDashboard: React.FC = () => {
 
   return (
     <Grid>
-      <Grid.Column width={10}>
+      <Grid.Column>
         <BonsaiList />
-      </Grid.Column>
-      <Grid.Column width={6}>
-        <h2>Bonsai Filters</h2>
       </Grid.Column>
     </Grid>
   )

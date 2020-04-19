@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { Segment, Form, Button, Grid } from 'semantic-ui-react';
 import { v4 as uuid } from 'uuid';
 import { Form as FinalForm, Field } from 'react-final-form';
-import { combineValidators, isRequired, isNumeric, composeValidators } from 'revalidate';
+import { combineValidators, isRequired } from 'revalidate';
 
 import { BonsaiFormValues } from '../../../app/models/bonsai';
 import { observer } from 'mobx-react-lite';
@@ -14,11 +14,7 @@ import { RootStoreContext } from '../../../app/stores/rootStore';
 
 const validate = combineValidators({
   name: isRequired('Name'),
-  species: isRequired('Species'),
-  age: composeValidators(
-    isRequired('Age'),
-    isNumeric('Age')
-  )(),
+  species: isRequired('Species')
 });
 
 interface FormParams {
@@ -79,12 +75,6 @@ const BonsaiForm: React.FC<RouteComponentProps<FormParams>> = ({ match, history 
                   placeholder='Species'
                   value={bonsai.species}
                   component={TextInput}
-                />
-                <Field
-                  component={TextInput}
-                  name='age'
-                  placeholder='Age'
-                  value={'' + bonsai.age}
                 />
                 <Button
                   disabled={loading || invalid || pristine}

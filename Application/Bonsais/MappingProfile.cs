@@ -7,9 +7,7 @@ namespace Application.Bonsais
     {
         public MappingProfile()
         {
-            CreateMap<Bonsai, BonsaiDto>()
-                .ForMember(dest => dest.Email, opt => opt.MapFrom(b => b.AppUser.Email))
-                .ForMember(dest => dest.UserName, opt => opt.MapFrom(b => b.AppUser.UserName));
+            CreateMap<Bonsai, BonsaiDto>();
         }
     }
 }
