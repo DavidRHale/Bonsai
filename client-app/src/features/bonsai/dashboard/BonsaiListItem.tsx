@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Segment, Item, Button } from 'semantic-ui-react';
+import { Segment, Item } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 
@@ -22,24 +22,17 @@ const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
               <Item.Description>
                 {bonsai.species}
               </Item.Description>
+
+
+              <Link to={detailBonsaiRoute(bonsai.id)} className='btn btn-primary'>
+                View
+              </Link>
+              <button onClick={event => deleteBonsai(event, bonsai.id)} className='btn btn-danger'>
+                Delete
+              </button>
             </Item.Content>
           </Item>
         </Item.Group>
-      </Segment>
-      <Segment clearing>
-        <Button
-          as={Link}
-          to={detailBonsaiRoute(bonsai.id)}
-          floated='right'
-          content='View'
-          color='blue'
-        />
-        <Button
-          onClick={event => deleteBonsai(event, bonsai.id)}
-          floated='right'
-          content='Delete'
-          color='red'
-        />
       </Segment>
     </Segment.Group>
   );
