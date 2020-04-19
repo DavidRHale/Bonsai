@@ -1,5 +1,4 @@
 import React, { useContext } from 'react'
-import { Segment, Item } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 
@@ -12,29 +11,29 @@ const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
   const { deleteBonsai } = rootStore.bonsaiStore;
 
   return (
-    <Segment.Group>
-      <Segment>
-        <Item.Group>
-          <Item>
-            <Item.Image size='tiny' circular src='/assets/user.png' />
-            <Item.Content>
-              <Item.Header as='a'>{bonsai.name}</Item.Header>
-              <Item.Description>
-                {bonsai.species}
-              </Item.Description>
+    <li id='bonsaiListItem' className='list-group-item card'>
+      <div className='row card-body'>
+        <div className='col'>
+          <h3 className='card-title'>{bonsai.name}</h3>
+          <p className='card-text'>{bonsai.species}</p>
+        </div>
 
-
-              <Link to={detailBonsaiRoute(bonsai.id)} className='btn btn-primary'>
-                View
-              </Link>
-              <button onClick={event => deleteBonsai(event, bonsai.id)} className='btn btn-danger'>
-                Delete
-              </button>
-            </Item.Content>
-          </Item>
-        </Item.Group>
-      </Segment>
-    </Segment.Group>
+        <div className='col-2 btn-group-vertical'>
+          <Link
+            to={detailBonsaiRoute(bonsai.id)}
+            className='btn btn-primary'
+          >
+            View
+          </Link>
+          <button
+            onClick={event => deleteBonsai(event, bonsai.id)}
+            className='btn btn-danger'
+          >
+            Delete
+          </button>
+        </div>
+      </div>
+    </li>
   );
 }
 
