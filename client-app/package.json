@@ -19,6 +19,7 @@
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
     "react-final-form": "^6.3.5",
+    "react-hook-form": "^5.5.0",
     "react-router-dom": "^5.1.2",
     "react-scripts": "^3.3.0",
     "react-toastify": "^5.5.0",
@@ -50,5 +51,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/enzyme": "^3.10.5",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.2"
   }
 }
