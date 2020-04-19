@@ -11,7 +11,7 @@ const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
   const { deleteBonsai } = rootStore.bonsaiStore;
 
   return (
-    <li id='bonsaiListItem' className='list-group-item card'>
+    <li id='bonsaiListItem' className='list-group-item card mb-3'>
       <div className='row card-body'>
         <div className='col'>
           <h3 className='card-title'>{bonsai.name}</h3>

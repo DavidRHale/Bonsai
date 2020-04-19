@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from 'react'
-import { Grid } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 
 import Loader from '../../../app/layout/Loader';
@@ -19,11 +18,9 @@ const BonsaiDashboard: React.FC = () => {
   }
 
   return (
-    <Grid>
-      <Grid.Column>
-        <BonsaiList />
-      </Grid.Column>
-    </Grid>
+    <div id='bonsaiDashboard' className='container'>
+      <BonsaiList />
+    </div>
   )
 };
 

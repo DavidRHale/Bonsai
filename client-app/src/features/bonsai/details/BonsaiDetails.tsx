@@ -1,9 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { RouteComponentProps, Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
 
 import Loader from '../../../app/layout/Loader';
-import { observer } from 'mobx-react-lite';
-import { Button } from 'semantic-ui-react';
 import { manageRoute } from '../../../app/layout/appRoutes';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
@@ -28,16 +27,14 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
   }
 
   return (
-    <div>
+    <div id='bonsaiDetails' className='container'>
       <h1>{bonsai.name}</h1>
-      <Button
-        as={Link}
+      <Link
         to={manageRoute(bonsai.id)}
-        color='orange'
-        floated='right'
+        className='btn btn-secondary'
       >
         Manage Bonsai
-      </Button>
+      </Link>
     </div>
   )
 }
