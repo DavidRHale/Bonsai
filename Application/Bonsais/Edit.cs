@@ -25,7 +25,6 @@ namespace Application.Bonsais
             {
                 RuleFor(x => x.Name).NotEmpty();
                 RuleFor(x => x.Species).NotEmpty();
-                RuleFor(x => x.Age).NotEmpty();
             }
         }
 
