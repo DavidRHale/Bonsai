@@ -34,11 +34,11 @@ describe('TextInput', () => {
     expect(input.props().placeholder).toBe('aPlaceholder');
   });
 
-  it('should have a value passed through props', () => {
-    const wrapper = shallow(<TextInput value='aValue' />);
+  it('should have a defaultValue passed through props', () => {
+    const wrapper = shallow(<TextInput defaultValue='aValue' />);
     const input = wrapper.find('input');
 
-    expect(input.props().value).toBe('aValue');
+    expect(input.props().defaultValue).toBe('aValue');
   });
 
   it('should set the input id to be the same as the name', () => {
@@ -48,7 +48,7 @@ describe('TextInput', () => {
     expect(input.props().id).toBe('aName');
   });
 
-  it('should have a lable for the input', () => {
+  it('should have a label for the input', () => {
     const wrapper = shallow(<TextInput name='aName' />);
     const label = wrapper.find('label');
 
@@ -61,4 +61,6 @@ describe('TextInput', () => {
 
     expect(label.text()).toBe('Label Text');
   });
+
+  // todo test it gets the ref passed in
 });

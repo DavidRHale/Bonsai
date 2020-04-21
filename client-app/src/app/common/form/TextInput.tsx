@@ -3,11 +3,12 @@ import React from 'react'
 interface TextInputProps {
   name: string;
   placeholder: string;
-  value: string;
+  defaultValue: string;
   label: string;
+  formRef: any;
 }
 
-export const TextInput: React.FC<TextInputProps> = ({ name, placeholder, value, label }) => (
+export const TextInput: React.FC<TextInputProps> = ({ name, placeholder, defaultValue, label, formRef }) => (
   <div className='textInput'>
     <label htmlFor={name}>{label}</label>
     <input
@@ -15,7 +16,8 @@ export const TextInput: React.FC<TextInputProps> = ({ name, placeholder, value, 
       name={name}
       id={name}
       placeholder={placeholder}
-      value={value}
+      defaultValue={defaultValue}
+      ref={formRef}
     />
   </div>
 );
