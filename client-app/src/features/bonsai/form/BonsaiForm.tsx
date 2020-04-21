@@ -1,107 +1,85 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'
+import { v4 as uuid } from 'uuid';
+import { observer } from 'mobx-react-lite';
+import { useForm } from 'react-hook-form';
 
-export const BonsaiForm: React.FC = () => (<form id='bonsaiForm' />);
+import { BonsaiFormValues } from '../../../app/models/bonsai';
+import { RouteComponentProps } from 'react-router';
+import { TextInput } from '../../../app/common/form/TextInput';
+import { detailBonsaiRoute, LIST_BONSAI_ROUTE } from '../../../app/layout/appRoutes';
+import { useRootStoreContext } from '../../../app/stores/rootStore';
 
-// import React, { useState, useContext, useEffect } from 'react'
-// import { Segment, Form, Button, Grid } from 'semantic-ui-react';
-// import { v4 as uuid } from 'uuid';
-// import { Form as FinalForm, Field } from 'react-final-form';
-// import { combineValidators, isRequired } from 'revalidate';
+interface FormParams {
+  id: string
+};
 
-// import { BonsaiFormValues } from '../../../app/models/bonsai';
-// import { observer } from 'mobx-react-lite';
-// import { RouteComponentProps } from 'react-router';
-// import TextInput from '../../../app/common/form/TextInput';
+type FormData = {
+  name: string;
+  species: string;
+};
 
-// import { detailBonsaiRoute, LIST_BONSAI_ROUTE } from '../../../app/layout/appRoutes';
-// import { RootStoreContext } from '../../../app/stores/rootStore';
+export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({ match, history }) => {
+  const { register, handleSubmit, errors } = useForm<FormData>();
 
-// const validate = combineValidators({
-//   name: isRequired('Name'),
-//   species: isRequired('Species')
-// });
+  const onSubmit = handleSubmit(({ name, species }) => {
+    if (!bonsai.id) {
+      const newBonsai = {
+        id: uuid(),
+        name,
+        species
+      };
+      createBonsai(newBonsai);
+    } else {
+      editBonsai({ id: bonsai.id, name, species });
+    }
+  });
 
-// interface FormParams {
-//   id: string
-// }
+  const rootStore = useRootStoreContext();
+  const { createBonsai, editBonsai, submitting, loadBonsai } = rootStore.bonsaiStore;
 
-// const BonsaiForm: React.FC<RouteComponentProps<FormParams>> = ({ match, history }) => {
-//   const rootStore = useContext(RootStoreContext);
-//   const { createBonsai, editBonsai, submitting, loadBonsai } = rootStore.bonsaiStore;
+  const [bonsai, setBonsai] = useState(new BonsaiFormValues());
+  const [loading, setLoading] = useState(false);
 
-//   const [bonsai, setBonsai] = useState(new BonsaiFormValues());
-//   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    if (match.params.id) {
+      setLoading(true);
+      loadBonsai(match.params.id)
+        .then((bonsai) => setBonsai(new BonsaiFormValues(bonsai)))
+        .finally(() => setLoading(false));
+    }
+  }, [loadBonsai, match.params.id]);
 
-//   useEffect(() => {
-//     if (match.params.id) {
-//       setLoading(true);
-//       loadBonsai(match.params.id)
-//         .then((bonsai) => setBonsai(new BonsaiFormValues(bonsai)))
-//         .finally(() => setLoading(false));
-//     }
-//   }, [loadBonsai, match.params.id]);
+  return (
+    <form onSubmit={onSubmit}>
+      <TextInput
+        name='name'
+        placeholder='Name'
+        defaultValue={bonsai.name}
+        label='Name'
+        formRef={register({ required: true })}
+      />
+      {errors.name && 'Name is required'}
+      <TextInput
+        name='species'
+        placeholder='Species'
+        defaultValue={bonsai.species}
+        label='Species'
+        formRef={register({ required: true })}
+      />
+      {errors.species && 'Species is required'}
+      <input
+        type='submit'
+        value='Submit'
+      />
+      <button
+        disabled={loading}
+        onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)}
+        type='button'
+      >
+        Cancel
+      </button>
+    </form>
+  )
+}
 
-//   const handleFinalFormSubmit = (values: any) => {
-//     const formBonsai = {
-//       ...values,
-//       age: +values.age
-//     };
-
-//     if (!values.id) {
-//       const newBonsai = {
-//         ...formBonsai,
-//         id: uuid()
-//       };
-//       createBonsai(newBonsai);
-//     } else {
-//       editBonsai(formBonsai);
-//     }
-//   }
-
-//   return (
-//     <Grid>
-//       <Grid.Column width={10}>
-//         <Segment clearing>
-//           <FinalForm
-//             initialValues={bonsai}
-//             onSubmit={handleFinalFormSubmit}
-//             validate={validate}
-//             render={({ handleSubmit, invalid, pristine }) => (
-//               <Form onSubmit={handleSubmit} loading={loading}>
-//                 <Field
-//                   name='name'
-//                   placeholder='Name'
-//                   value={bonsai.name}
-//                   component={TextInput}
-//                 />
-//                 <Field
-//                   name='species'
-//                   placeholder='Species'
-//                   value={bonsai.species}
-//                   component={TextInput}
-//                 />
-//                 <Button
-//                   disabled={loading || invalid || pristine}
-//                   floated='right'
-//                   positive
-//                   type='submit'
-//                   content='Submit'
-//                   loading={submitting}
-//                 />
-//                 <Button
-//                   disabled={loading}
-//                   onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)}
-//                   floated='right'
-//                   type='button'
-//                   content='Cancel'
-//                 />
-//               </Form>
-//             )}
-//           />
-//         </Segment>
-//       </Grid.Column>
-//     </Grid>
-//   );
-// }
-
-// export default observer(BonsaiForm);
+export const BonsaiForm = observer(BonsaiFormComponent);

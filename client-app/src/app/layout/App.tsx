@@ -10,7 +10,7 @@ import BonsaiDashboard from '../../features/bonsai/dashboard/BonsaiDashboard';
 import { LIST_BONSAI_ROUTE, DETAIL_BONSAI_ROUTE, MANAGE_ROUTE, CREATE_BONSAI_ROUTE, LOG_IN_ROUTE, REGISTER_ROUTE } from './appRoutes';
 import NotFound from './NotFound';
 import BonsaiDetails from '../../features/bonsai/details/BonsaiDetails';
-import BonsaiForm from '../../features/bonsai/form/BonsaiForm';
+import { BonsaiForm } from '../../features/bonsai/form/BonsaiForm';
 import LoginForm from '../../features/user/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import ModalContainer from '../common/modals/ModalContainer';
