@@ -43,10 +43,8 @@ const LoginForm = () => {
       {errors.password && 'Password is required'}
       {submitError && 'Invalid email or password'}
       <br />
-      <button
-        type='submit'
-      >
-        Log
+      <button type='submit'>
+        Log In
       </button>
     </form >
   );

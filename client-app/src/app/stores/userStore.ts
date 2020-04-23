@@ -37,7 +37,7 @@ export default class UserStore {
     history.push('/');
   }
 
-  @action register = async (userFormValues: IUserFormValues) => {
+  @action registerUser = async (userFormValues: IUserFormValues) => {
     try {
       const user = await agent.User.register(userFormValues);
       this.rootStore.commonStore.setToken(user.token);
