@@ -34,6 +34,7 @@ export default class UserStore {
   @action logout = () => {
     this.rootStore.commonStore.setToken(null);
     this.user = null;
+    this.rootStore.bonsaiStore.clearBonsais();
     history.push('/');
   }
 

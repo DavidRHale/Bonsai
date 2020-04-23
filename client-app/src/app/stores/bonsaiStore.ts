@@ -68,7 +68,6 @@ export default class BonsaiStore {
         console.log(error);
       }
     }
-
   }
 
   getBonsai = (id: string) => {
@@ -77,6 +76,10 @@ export default class BonsaiStore {
 
   @action clearBonsai = () => {
     this.bonsai = null;
+  }
+
+  @action clearBonsais = () => {
+    this.bonsaiRegistry = new Map();
   }
 
   @action selectBonsai = (id: string) => {
