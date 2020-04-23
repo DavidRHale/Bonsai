@@ -1,18 +1,19 @@
 import React from 'react'
 
 interface TextInputProps {
+  type?: string;
   name: string;
   placeholder: string;
-  defaultValue: string;
+  defaultValue?: string;
   label: string;
   formRef: any;
 }
 
-export const TextInput: React.FC<TextInputProps> = ({ name, placeholder, defaultValue, label, formRef }) => (
+export const Input: React.FC<TextInputProps> = ({ type, name, placeholder, defaultValue, label, formRef }) => (
   <div className='textInput'>
     <label htmlFor={name}>{label}</label>
     <input
-      type='text'
+      type={type}
       name={name}
       id={name}
       placeholder={placeholder}
@@ -21,3 +22,8 @@ export const TextInput: React.FC<TextInputProps> = ({ name, placeholder, default
     />
   </div>
 );
+
+
+Input.defaultProps = {
+  type: 'text'
+};

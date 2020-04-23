@@ -47,7 +47,7 @@ describe('TextAreaInput', () => {
     expect(textArea.props().id).toBe('aName');
   });
 
-  it('should have a lable for the textArea', () => {
+  it('should have a label for the textArea', () => {
     const wrapper = shallow(<TextAreaInput name='aName' />);
     const label = wrapper.find('label');
 

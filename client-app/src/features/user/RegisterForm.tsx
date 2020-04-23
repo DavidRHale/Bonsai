@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Form as FinalForm, Field } from 'react-final-form';
 import { Form, Button, Header } from 'semantic-ui-react';
-import TextInput from '../../app/common/form/TextInput';
+import { Input } from '../../app/common/form/Input';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IUserFormValues } from '../../app/models/user';
 import { FORM_ERROR } from 'final-form';
@@ -34,7 +34,7 @@ const RegisterForm = () => {
             color='teal'
             textAlign='center'
           />
-          <Field
+          {/* <Field
             name='email'
             placeholder='Email'
             component={TextInput}
@@ -54,7 +54,7 @@ const RegisterForm = () => {
             type='password'
             placeholder='Password'
             component={TextInput}
-          />
+          /> */}
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage error={submitError} />
           )

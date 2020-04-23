@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 
 import { BonsaiFormValues } from '../../../app/models/bonsai';
 import { RouteComponentProps } from 'react-router';
-import { TextInput } from '../../../app/common/form/TextInput';
+import { Input } from '../../../app/common/form/Input';
 import { detailBonsaiRoute, LIST_BONSAI_ROUTE } from '../../../app/layout/appRoutes';
 import { useRootStoreContext } from '../../../app/stores/rootStore';
 
@@ -51,7 +51,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <TextInput
+      <Input
         name='name'
         placeholder='Name'
         defaultValue={bonsai.name}
@@ -59,7 +59,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
         formRef={register({ required: true })}
       />
       {errors.name && 'Name is required'}
-      <TextInput
+      <Input
         name='species'
         placeholder='Species'
         defaultValue={bonsai.species}

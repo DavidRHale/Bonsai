@@ -1,63 +1,55 @@
-import React, { useContext } from 'react';
-import { Form as FinalForm, Field } from 'react-final-form';
-import { Form, Button, Header } from 'semantic-ui-react';
-import TextInput from '../../app/common/form/TextInput';
+import React, { useContext, useState } from 'react';
+import { Input } from '../../app/common/form/Input';
 import { RootStoreContext } from '../../app/stores/rootStore';
 import { IUserFormValues } from '../../app/models/user';
-import { FORM_ERROR } from 'final-form';
-import { combineValidators, isRequired } from 'revalidate';
-import ErrorMessage from '../../app/common/form/ErrorMessage';
+import { useForm } from 'react-hook-form';
 
-const validate = combineValidators({
-  email: isRequired('email'),
-  password: isRequired('password'),
-})
+type FormData = {
+  email: string;
+  password: string;
+};
 
 const LoginForm = () => {
   const rootStore = useContext(RootStoreContext);
   const { login } = rootStore.userStore;
+  const { register, handleSubmit, errors } = useForm<FormData>();
+
+  const [submitError, setSubmitError] = useState('');
+
+  const onSubmit = handleSubmit((values: IUserFormValues) => {
+    login(values)
+      .catch(error => setSubmitError(error));
+  });
+
+  const clearSubmitError = () => submitError && setSubmitError('');
 
   return (
-    <FinalForm
-      onSubmit={(values: IUserFormValues) => login(values).catch(error => ({
-        [FORM_ERROR]: error
-      }))}
-      validate={validate}
-      render={({ handleSubmit, submitting, submitError, invalid, pristine, dirtySinceLastSubmit }) => (
-        <Form onSubmit={handleSubmit} error>
-          <Header
-            as='h2'
-            content='Log In'
-            color='teal'
-            textAlign='center'
-          />
-          <Field
-            name='email'
-            placeholder='Email'
-            component={TextInput}
-          />
-          <Field
-            name='password'
-            type='password'
-            placeholder='Password'
-            component={TextInput}
-          />
-          {submitError && !dirtySinceLastSubmit && (
-            <ErrorMessage error={submitError} text='Invalid email or password' />
-          )
-          }
-          <br />
-          <Button
-            disabled={(invalid && !dirtySinceLastSubmit) || pristine}
-            loading={submitting}
-            content='Log In'
-            color='teal'
-            fluid
-          />
-        </Form >
-      )}
-    />
+    <form onSubmit={onSubmit} onChange={clearSubmitError}>
+      <h2>Log In</h2>
+      <Input
+        name='email'
+        placeholder='Email'
+        label='Email'
+        formRef={register({ required: true })}
+      />
+      {errors.email && 'Email is required'}
+      <Input
+        type='password'
+        name='password'
+        placeholder='Password'
+        label='Password'
+        formRef={register({ required: true })}
+      />
+      {errors.password && 'Password is required'}
+      {submitError && 'Invalid email or password'}
+      <br />
+      <button
+        type='submit'
+      >
+        Log
+      </button>
+    </form >
   );
-};
+}
 
 export default LoginForm;
