@@ -22,7 +22,7 @@ export default class BonsaiStore {
   @observable target = '';
 
   @computed get allBonsais() {
-    return Array.from(this.bonsaiRegistry.values())
+    return Array.from(this.bonsaiRegistry.values());
   }
 
   @action loadBonsais = async () => {
@@ -32,7 +32,7 @@ export default class BonsaiStore {
       const bonsais = await agent.Bonsai.list();
 
       runInAction('load bonsais', () => {
-        bonsais.forEach(bonsai => {
+        bonsais.forEach((bonsai) => {
           this.bonsaiRegistry.set(bonsai.id, bonsai);
         });
         this.loadingInitial = false;
@@ -43,7 +43,7 @@ export default class BonsaiStore {
         this.loadingInitial = false;
       });
     }
-  }
+  };
 
   @action loadBonsai = async (id: string) => {
     let bonsai = this.getBonsai(id);
@@ -56,6 +56,7 @@ export default class BonsaiStore {
 
       try {
         bonsai = await agent.Bonsai.details(id);
+        console.log(bonsai);
         runInAction('load bonsai', () => {
           this.bonsai = bonsai;
           this.loadingInitial = false;
@@ -68,19 +69,19 @@ export default class BonsaiStore {
         console.log(error);
       }
     }
-  }
+  };
 
   getBonsai = (id: string) => {
     return this.bonsaiRegistry.get(id);
-  }
+  };
 
   @action clearBonsai = () => {
     this.bonsai = null;
-  }
+  };
 
   @action clearBonsais = () => {
     this.bonsaiRegistry = new Map();
-  }
+  };
 
   @action selectBonsai = (id: string) => {
     this.bonsai = this.bonsaiRegistry.get(id);
@@ -106,7 +107,7 @@ export default class BonsaiStore {
       toast.error('Problem submitting data');
       console.log(error.response);
     }
-  }
+  };
 
   @action editBonsai = async (bonsai: IBonsai) => {
     this.submitting = true;
@@ -128,7 +129,7 @@ export default class BonsaiStore {
       toast.error('Problem submitting data');
       console.log(error);
     }
-  }
+  };
 
   @action deleteBonsai = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
     this.submitting = true;
@@ -149,5 +150,5 @@ export default class BonsaiStore {
       });
       console.log(error);
     }
-  }
+  };
 }

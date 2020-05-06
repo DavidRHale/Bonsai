@@ -29,6 +29,7 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
   return (
     <div id="bonsaiDetails" className="container">
       <h1>{bonsai.name}</h1>
+      <p>{bonsai.species}</p>
       <Link to={manageRoute(bonsai.id)} className="btn btn-secondary">
         Manage Bonsai
       </Link>
