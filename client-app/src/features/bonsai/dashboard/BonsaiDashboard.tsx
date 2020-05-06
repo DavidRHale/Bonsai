@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react'
+import React, { useEffect, useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import Loader from '../../../app/layout/Loader';
@@ -14,14 +14,14 @@ const BonsaiDashboard: React.FC = () => {
   }, [loadBonsais]);
 
   if (loadingInitial) {
-    return <Loader content='Loading your bonsai...' />;
+    return <Loader />;
   }
 
   return (
-    <div id='bonsaiDashboard' className='container'>
+    <div id="bonsaiDashboard" className="container">
       <BonsaiList />
     </div>
-  )
+  );
 };
 
 export default observer(BonsaiDashboard);

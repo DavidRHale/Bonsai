@@ -1,5 +1,4 @@
 import React, { Fragment, useContext, useEffect } from 'react';
-import { Container, Loader } from 'semantic-ui-react';
 import { observer } from 'mobx-react-lite';
 import { Route, withRouter, RouteComponentProps, Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -15,6 +14,7 @@ import LoginForm from '../../features/user/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import ModalContainer from '../common/modals/ModalContainer';
 import RegisterForm from '../../features/user/RegisterForm';
+import Loader from './Loader';
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const rootStore = useContext(RootStoreContext);
@@ -30,7 +30,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
   }, [getUser, setAppLoaded, token]);
 
   if (!appLoaded) {
-    return <Loader content="Loading..." />;
+    return <Loader />;
   }
 
   return (
@@ -44,7 +44,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
         render={() => (
           <Fragment>
             <NavBar />
-            <Container style={{ marginTop: '7em' }}>
+            <div style={{ marginTop: '7em' }}>
               <Switch>
                 <Route exact path={LIST_BONSAI_ROUTE} component={BonsaiDashboard} />
                 <Route exact path={DETAIL_BONSAI_ROUTE} component={BonsaiDetails} />
@@ -53,7 +53,7 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                 <Route key={location.key} path={[CREATE_BONSAI_ROUTE, MANAGE_ROUTE]} component={BonsaiForm} />
                 <Route component={NotFound} />
               </Switch>
-            </Container>
+            </div>
           </Fragment>
         )}
       />

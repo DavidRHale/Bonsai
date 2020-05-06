@@ -6,4 +6,4 @@ export const combineDateAndTime = (date: Date, time: Date) => {
   const dateString = `${year}-${month}-${day}`;
 
   return new Date(dateString + ' ' + timeString);
-}
+};

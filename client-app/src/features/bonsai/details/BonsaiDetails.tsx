@@ -7,7 +7,7 @@ import { manageRoute } from '../../../app/layout/appRoutes';
 import { RootStoreContext } from '../../../app/stores/rootStore';
 
 interface DetailParams {
-  id: string
+  id: string;
 }
 
 const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, history }) => {
@@ -15,11 +15,11 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
   const { bonsai, loadBonsai, loadingInitial } = rootStore.bonsaiStore;
 
   useEffect(() => {
-    loadBonsai(match.params.id)
+    loadBonsai(match.params.id);
   }, [loadBonsai, match.params.id, history]);
 
   if (loadingInitial) {
-    return <Loader content='Loading bonsai...' />
+    return <Loader />;
   }
 
   if (!bonsai) {
@@ -27,16 +27,13 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
   }
 
   return (
-    <div id='bonsaiDetails' className='container'>
+    <div id="bonsaiDetails" className="container">
       <h1>{bonsai.name}</h1>
-      <Link
-        to={manageRoute(bonsai.id)}
-        className='btn btn-secondary'
-      >
+      <Link to={manageRoute(bonsai.id)} className="btn btn-secondary">
         Manage Bonsai
       </Link>
     </div>
-  )
-}
+  );
+};
 
 export default observer(BonsaiDetails);

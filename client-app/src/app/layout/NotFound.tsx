@@ -1,20 +1,17 @@
 import React from 'react';
-import { Segment, Button, Header, Icon } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
 const NotFound = () => {
   return (
-    <Segment placeholder>
-      <Header icon>
-        <Icon name='search' />
+    <div>
+      <header>
+        {/* <icon name="search" /> */}
         Oops - we've looked everywhere but couldn't find this.
-      </Header>
-      <Segment.Inline>
-        <Button as={Link} to='/bonsai' primary>
-          Return to Bonsai page
-        </Button>
-      </Segment.Inline>
-    </Segment>
+      </header>
+      <span>
+        <Link to="/bonsai">Return to Bonsai page</Link>
+      </span>
+    </div>
   );
 };
 
