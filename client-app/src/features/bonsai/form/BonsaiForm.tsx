@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
 import { observer } from 'mobx-react-lite';
 import { useForm } from 'react-hook-form';
@@ -10,8 +10,8 @@ import { detailBonsaiRoute, LIST_BONSAI_ROUTE } from '../../../app/layout/appRou
 import { useRootStoreContext } from '../../../app/stores/rootStore';
 
 interface FormParams {
-  id: string
-};
+  id: string;
+}
 
 type FormData = {
   name: string;
@@ -26,7 +26,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
       const newBonsai = {
         id: uuid(),
         name,
-        species
+        species,
       };
       createBonsai(newBonsai);
     } else {
@@ -35,7 +35,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
   });
 
   const rootStore = useRootStoreContext();
-  const { createBonsai, editBonsai, submitting, loadBonsai } = rootStore.bonsaiStore;
+  const { createBonsai, editBonsai, loadBonsai } = rootStore.bonsaiStore;
 
   const [bonsai, setBonsai] = useState(new BonsaiFormValues());
   const [loading, setLoading] = useState(false);
@@ -51,35 +51,16 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <Input
-        name='name'
-        placeholder='Name'
-        defaultValue={bonsai.name}
-        label='Name'
-        formRef={register({ required: true })}
-      />
+      <Input name="name" placeholder="Name" defaultValue={bonsai.name} label="Name" formRef={register({ required: true })} />
       {errors.name && 'Name is required'}
-      <Input
-        name='species'
-        placeholder='Species'
-        defaultValue={bonsai.species}
-        label='Species'
-        formRef={register({ required: true })}
-      />
+      <Input name="species" placeholder="Species" defaultValue={bonsai.species} label="Species" formRef={register({ required: true })} />
       {errors.species && 'Species is required'}
-      <input
-        type='submit'
-        value='Submit'
-      />
-      <button
-        disabled={loading}
-        onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)}
-        type='button'
-      >
+      <input type="submit" value="Submit" />
+      <button disabled={loading} onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)} type="button">
         Cancel
       </button>
     </form>
-  )
-}
+  );
+};
 
 export const BonsaiForm = observer(BonsaiFormComponent);

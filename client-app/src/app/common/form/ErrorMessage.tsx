@@ -1,6 +1,5 @@
 import React from 'react';
 import { AxiosResponse } from 'axios';
-import { Message } from 'semantic-ui-react';
 
 interface IProps {
   error: AxiosResponse,
@@ -10,17 +9,14 @@ interface IProps {
 const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
   return (
     <div>
-      <Message error>
-        <Message.Header>{error.statusText}</Message.Header>
-        {error.data && Object.keys(error.data.errors).length > 0 && (
-          <Message.List>
-            {Object.values(error.data.errors).flat().map((err, index) => (
-              <Message.Item key={index}>{err}</Message.Item>
-            ))}
-          </Message.List>
-        )}
-        {text && <Message.Content content={text} />}
-      </Message>
+      {error.data && Object.keys(error.data.errors).length > 0 && (
+        <ul>
+          {Object.values(error.data.errors).flat().map((err, index) => (
+            <li key={index}>{err}</li>
+          ))}
+        </ul>
+      )}
+      {text}
     </div>
   );
 };
