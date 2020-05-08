@@ -5,20 +5,24 @@ import { IBonsai } from '../models/bonsai';
 import { history } from '../..';
 import { NOT_FOUND_ROUTE } from '../layout/appRoutes';
 import { IUser, IUserFormValues } from '../models/user';
+import { IJob } from '../models/job';
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
-axios.interceptors.request.use((config) => {
-  const token = window.localStorage.getItem('jwt');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+axios.interceptors.request.use(
+  (config) => {
+    const token = window.localStorage.getItem('jwt');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  return config;
-}, error => {
-  return Promise.reject(error);
-});
+);
 
-axios.interceptors.response.use(undefined, error => {
+axios.interceptors.response.use(undefined, (error) => {
   if (error.message === 'Network Error' && !error.response) {
     toast.error('Network error');
   }
@@ -33,7 +37,7 @@ axios.interceptors.response.use(undefined, error => {
   }
 
   if (status === 500) {
-    toast.error('Server error')
+    toast.error('Server error');
   }
 
   throw error.response;
@@ -41,15 +45,13 @@ axios.interceptors.response.use(undefined, error => {
 
 const responseBody = (response: AxiosResponse) => response.data;
 
-const sleep = (ms: number) => (response: AxiosResponse) => (
-  new Promise<AxiosResponse>(resolve => setTimeout(() => resolve(response), ms))
-);
+const sleep = (ms: number) => (response: AxiosResponse) => new Promise<AxiosResponse>((resolve) => setTimeout(() => resolve(response), ms));
 
 const requests = {
   get: (url: string) => axios.get(url).then(sleep(1000)).then(responseBody),
   post: (url: string, body: {}) => axios.post(url, body).then(sleep(1000)).then(responseBody),
   put: (url: string, body: {}) => axios.put(url, body).then(sleep(1000)).then(responseBody),
-  delete: (url: string) => axios.delete(url).then(sleep(1000)).then(responseBody)
+  delete: (url: string) => axios.delete(url).then(sleep(1000)).then(responseBody),
 };
 
 const Bonsai = {
@@ -57,13 +59,17 @@ const Bonsai = {
   details: (id: string) => requests.get(`/bonsais/${id}`),
   create: (bonsai: IBonsai) => requests.post('/bonsais', bonsai),
   update: (bonsai: IBonsai) => requests.put(`/bonsais/${bonsai.id}`, bonsai),
-  delete: (id: string) => requests.delete(`/bonsais/${id}`)
+  delete: (id: string) => requests.delete(`/bonsais/${id}`),
+};
+
+const Job = {
+  create: (job: IJob) => requests.post('/jobs', job),
 };
 
 const User = {
   current: (): Promise<IUser> => requests.get('/user'),
   login: (user: IUserFormValues): Promise<IUser> => requests.post('/user/login', user),
-  register: (user: IUserFormValues): Promise<IUser> => requests.post('/user/register', user)
-}
+  register: (user: IUserFormValues): Promise<IUser> => requests.post('/user/register', user),
+};
 
-export default { Bonsai, User };
+export default { Bonsai, Job, User };

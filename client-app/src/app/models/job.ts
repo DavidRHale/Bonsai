@@ -1,7 +1,9 @@
+import { JobType } from '../enum/JobType';
+
 export interface IJob {
   id: string;
-  jobType: number;
+  jobType: JobType;
   dueBy: Date;
-  customName: string;
+  customName?: string;
   bonsaiId: string;
 }

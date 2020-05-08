@@ -7,6 +7,7 @@ import { detailBonsaiRoute } from '../layout/appRoutes';
 import { history } from '../..';
 import { toast } from 'react-toastify';
 import { RootStore } from './rootStore';
+import { IJob } from '../models/job';
 
 export default class BonsaiStore {
   rootStore: RootStore;
@@ -147,6 +148,30 @@ export default class BonsaiStore {
         this.submitting = false;
         this.target = '';
       });
+      console.log(error);
+    }
+  };
+
+  @action createJob = async (job: IJob) => {
+    this.submitting = true;
+
+    try {
+      await agent.Job.create(job);
+
+      runInAction('create job', () => {
+        this.submitting = false;
+      });
+
+      history.push(detailBonsaiRoute(job.bonsaiId));
+    } catch (error) {
+      runInAction('create job error', () => {
+        this.submitting = false;
+      });
+
+      console.log('hello');
+      toast.error('Problem submitting data');
+      // toast.error(error.response);
+      console.log('something went wrong create job');
       console.log(error);
     }
   };

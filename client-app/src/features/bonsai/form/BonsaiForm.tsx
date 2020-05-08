@@ -51,12 +51,12 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <Input name="name" placeholder="Name" defaultValue={bonsai.name} label="Name" formRef={register({ required: true })} />
+      <Input name='name' placeholder='Name' defaultValue={bonsai.name} label='Name' formRef={register({ required: true })} />
       {errors.name && 'Name is required'}
-      <Input name="species" placeholder="Species" defaultValue={bonsai.species} label="Species" formRef={register({ required: true })} />
+      <Input name='species' placeholder='Species' defaultValue={bonsai.species} label='Species' formRef={register({ required: true })} />
       {errors.species && 'Species is required'}
-      <input type="submit" value="Submit" />
-      <button disabled={loading} onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)} type="button">
+      <input type='submit' value='Submit' />
+      <button disabled={loading} onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)} type='button'>
         Cancel
       </button>
     </form>
