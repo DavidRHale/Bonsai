@@ -56,7 +56,6 @@ export default class BonsaiStore {
 
       try {
         bonsai = await agent.Bonsai.details(id);
-        console.log(bonsai);
         runInAction('load bonsai', () => {
           this.bonsai = bonsai;
           this.loadingInitial = false;
