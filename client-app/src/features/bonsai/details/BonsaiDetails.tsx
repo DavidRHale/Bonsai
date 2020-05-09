@@ -5,7 +5,7 @@ import { observer } from 'mobx-react-lite';
 import Loader from '../../../app/layout/Loader';
 import { manageBonsaiRoute, createJobRoute } from '../../../app/layout/appRoutes';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import { JobType, toPrettyString } from '../../../app/enum/JobType';
+import { JobListItem } from '../jobs/JobListItem';
 
 interface DetailParams {
   id: string;
@@ -33,7 +33,7 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
       return (
         <ul>
           {jobs.map((job) => (
-            <li key={job.id}>{job.jobType === JobType.Other ? job.customName : toPrettyString(job.jobType)}</li>
+            <JobListItem key={job.id} {...job}></JobListItem>
           ))}
         </ul>
       );
