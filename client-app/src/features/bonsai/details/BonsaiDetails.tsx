@@ -5,6 +5,7 @@ import { observer } from 'mobx-react-lite';
 import Loader from '../../../app/layout/Loader';
 import { manageBonsaiRoute, createJobRoute } from '../../../app/layout/appRoutes';
 import { RootStoreContext } from '../../../app/stores/rootStore';
+import { JobType, toPrettyString } from '../../../app/enum/JobType';
 
 interface DetailParams {
   id: string;
@@ -32,7 +33,7 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
       return (
         <ul>
           {jobs.map((job) => (
-            <li key={job.id}>{job.jobType}</li>
+            <li key={job.id}>{job.jobType === JobType.Other ? job.customName : toPrettyString(job.jobType)}</li>
           ))}
         </ul>
       );
@@ -42,15 +43,15 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
   };
 
   return (
-    <div id="bonsaiDetails" className="container">
+    <div id='bonsaiDetails' className='container'>
       <h1>{bonsai.name}</h1>
       <p>{bonsai.species}</p>
-      <Link to={manageBonsaiRoute(bonsai.id)} className="btn btn-secondary">
+      <Link to={manageBonsaiRoute(bonsai.id)} className='btn btn-secondary'>
         Manage Bonsai
       </Link>
       <h3>Jobs</h3>
       {renderJobs()}
-      <Link to={createJobRoute(bonsai.id)} className="btn btn-secondary">
+      <Link to={createJobRoute(bonsai.id)} className='btn btn-secondary'>
         Add A Job
       </Link>
     </div>

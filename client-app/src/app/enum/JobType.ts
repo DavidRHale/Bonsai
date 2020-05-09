@@ -6,3 +6,12 @@ export enum JobType {
   PestControl,
   Other,
 }
+
+export const toPrettyString = (value: JobType): string => {
+  switch (value) {
+    case JobType.PestControl:
+      return 'Pest Control';
+    default:
+      return JobType[value];
+  }
+};

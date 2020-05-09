@@ -1,7 +1,7 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 
-import { JobType } from '../../../app/enum/JobType';
+import { JobType, toPrettyString } from '../../../app/enum/JobType';
 import { getEnumValues } from '../../../app/enum/getEnumValues';
 import { Input } from '../../../app/common/form/Input';
 import { RouteComponentProps } from 'react-router-dom';
@@ -45,7 +45,7 @@ export const JobForm: React.FC<RouteComponentProps<FormParams>> = ({ match }) =>
           <option value=''>Select job type...</option>
           {getEnumValues(JobType).map((jobType) => (
             <option key={jobType.value} value={jobType.value}>
-              {jobType.name}
+              {toPrettyString(jobType.value)}
             </option>
           ))}
         </select>
