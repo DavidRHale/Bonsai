@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext } from 'react';
 import { observer } from 'mobx-react-lite';
 import { NavLink } from 'react-router-dom';
 
@@ -10,25 +10,42 @@ const NavBar: React.FC = () => {
   const { user, logout } = rootStore.userStore;
 
   return (
-    <nav className='navbar navbar-dark bg-dark'>
+    <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
       <NavLink exact to='/' className='navbar-brand'>
-        <img src='/assets/logo.png' alt='logo' style={{ marginRight: '10px' }} />
+        <i className='fas fa-tree' style={{ marginRight: '10px' }}></i>
         Bonsai App
       </NavLink>
-      <ul className='navbar-nav'>
-        <li className='nav-item'>
-          <NavLink to='/bonsai' className='nav-link'>
-            Bonsai
-          </NavLink>
-        </li>
-        <li className='nav-item'>
-          <NavLink to={CREATE_BONSAI_ROUTE} className='nav-link'>
-            Add a Bonsai
-          </NavLink>
-        </li>
-      </ul>
-      {user && <button className='btn btn-outline-secondary nav-item' onClick={logout}>Log Out</button>}
-    </nav >
+      <button
+        className='navbar-toggler'
+        type='button'
+        data-toggle='collapse'
+        data-target='#navbarNav'
+        aria-controls='navbarNav'
+        aria-expanded='false'
+        aria-label='Toggle navigation'
+      >
+        <span className='navbar-toggler-icon'></span>
+      </button>
+      <div className='collapse navbar-collapse' id='navbarNav'>
+        <ul className='navbar-nav'>
+          <li className='nav-item'>
+            <NavLink to='/bonsai' className='nav-link'>
+              Bonsai
+            </NavLink>
+          </li>
+          <li className='nav-item'>
+            <NavLink to={CREATE_BONSAI_ROUTE} className='nav-link'>
+              Add a Bonsai
+            </NavLink>
+          </li>
+        </ul>
+      </div>
+      {user && (
+        <button className='btn btn-outline-secondary nav-item' onClick={logout}>
+          Log Out
+        </button>
+      )}
+    </nav>
   );
 };
 

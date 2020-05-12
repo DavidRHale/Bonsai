@@ -1,12 +1,8 @@
 import React from 'react';
 
-// const Loader: React.FC<{ inverted?: boolean; content?: string }> = ({ inverted = true, content }) => {
-//   return (
-//     <Dimmer active inverted={inverted}>
-//       <SemanticLoader content={content} />
-//     </Dimmer>
-//   );
-// };
-
-const Loader = () => <h4>'TODO MAKE A LOADER'</h4>;
+const Loader = () => (
+  <div className='loader center'>
+    <i className='fa fa-spinner fa-spin fa-3x' />
+  </div>
+);
 export default Loader;
