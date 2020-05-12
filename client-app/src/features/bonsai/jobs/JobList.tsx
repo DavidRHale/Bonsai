@@ -8,7 +8,7 @@ import { createJobRoute } from '../../../app/layout/appRoutes';
 const renderJobs = (jobs?: IJob[]) => {
   if (jobs && jobs.length > 0) {
     return (
-      <ul>
+      <ul className='list-group'>
         {jobs.map((job) => (
           <JobListItem key={job.id} {...job}></JobListItem>
         ))}
@@ -24,11 +24,15 @@ interface IProps {
 }
 
 export const JobList: React.FC<IProps> = ({ bonsai }) => (
-  <div>
-    <h3>Jobs</h3>
-    {renderJobs(bonsai.jobs)}
-    <Link to={createJobRoute(bonsai.id)} className='btn btn-secondary'>
-      Add A Job
-    </Link>
+  <div className='card'>
+    <div className='card-body'>
+      <h3 className='card-title'>
+        Jobs
+        <Link to={createJobRoute(bonsai.id)} className='btn btn-primary' style={{ marginLeft: '10px' }}>
+          Add A Job
+        </Link>
+      </h3>
+      {renderJobs(bonsai.jobs)}
+    </div>
   </div>
 );

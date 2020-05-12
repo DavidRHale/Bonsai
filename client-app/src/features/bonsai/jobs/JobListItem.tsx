@@ -13,9 +13,11 @@ interface IProps {
 
 export const JobListItem: React.FC<IProps> = ({ jobType, customName, dueBy }) => {
   return (
-    <li>
-      <h6>{jobType === JobType.Other ? customName : toPrettyString(jobType)}</h6>
-      <p>Due by {toDisplayDate(dueBy)}</p>
+    <li className='card'>
+      <div className='card-body'>
+        <h6 className='card-title'>{jobType === JobType.Other ? customName : toPrettyString(jobType)}</h6>
+        <p className='card-text'>Due by {toDisplayDate(dueBy)}</p>
+      </div>
     </li>
   );
 };

@@ -29,12 +29,27 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
 
   return (
     <div id='bonsaiDetails' className='container'>
-      <h1>{bonsai.name}</h1>
-      <p>{bonsai.species}</p>
-      <Link to={manageBonsaiRoute(bonsai.id)} className='btn btn-secondary'>
-        Manage Bonsai
-      </Link>
-      <JobList bonsai={bonsai} />
+      <div className='row'>
+        <div className='col-sm-6'>
+          <div className='card'>
+            <div className='card-body'>
+              <h4 className='card-title'>{bonsai.name}</h4>
+              <p className='card-text'>Species: {bonsai.species}</p>
+              <p className='card-text'>Other details: Other details go here</p>
+              <p className='card-text'>Other details: Other details go here</p>
+              <p className='card-text'>Other details: Other details go here</p>
+              <p className='card-text'>Other details: Other details go here</p>
+              <Link to={manageBonsaiRoute(bonsai.id)} className='btn btn-primary'>
+                Manage Bonsai
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className='col-sm-6'>
+          <JobList bonsai={bonsai} />
+        </div>
+      </div>
     </div>
   );
 };

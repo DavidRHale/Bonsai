@@ -49,7 +49,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
     }
   }, [loadBonsai, match.params.id]);
 
-  const title = bonsai.id ? 'Edit Bonsai' : 'Create Bonsai';
+  const title = match.params.id ? 'Edit Bonsai' : 'Create Bonsai';
 
   return (
     <div className='container'>
