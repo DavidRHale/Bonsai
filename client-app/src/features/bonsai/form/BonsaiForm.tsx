@@ -49,17 +49,39 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
     }
   }, [loadBonsai, match.params.id]);
 
+  const title = bonsai.id ? 'Edit Bonsai' : 'Create Bonsai';
+
   return (
-    <form onSubmit={onSubmit}>
-      <Input name='name' placeholder='Name' defaultValue={bonsai.name} label='Name' formRef={register({ required: true })} />
-      {errors.name && 'Name is required'}
-      <Input name='species' placeholder='Species' defaultValue={bonsai.species} label='Species' formRef={register({ required: true })} />
-      {errors.species && 'Species is required'}
-      <input type='submit' value='Submit' />
-      <button disabled={loading} onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)} type='button'>
-        Cancel
-      </button>
-    </form>
+    <div className='container'>
+      <h3>{title}</h3>
+      <form onSubmit={onSubmit}>
+        <Input
+          name='name'
+          placeholder='Name'
+          defaultValue={bonsai.name}
+          label='Name'
+          formRef={register({ required: true })}
+          error={errors.name && 'Name is required'}
+        />
+        <Input
+          name='species'
+          placeholder='Species'
+          defaultValue={bonsai.species}
+          label='Species'
+          formRef={register({ required: true })}
+          error={errors.species && 'Species is required'}
+        />
+        <input type='submit' value='Submit' className='btn btn-primary' />
+        <button
+          disabled={loading}
+          onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)}
+          type='button'
+          className='btn btn-secondary'
+        >
+          Cancel
+        </button>
+      </form>
+    </div>
   );
 };
 
