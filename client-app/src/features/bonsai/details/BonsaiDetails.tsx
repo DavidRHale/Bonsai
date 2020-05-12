@@ -3,9 +3,9 @@ import { RouteComponentProps, Link } from 'react-router-dom';
 import { observer } from 'mobx-react-lite';
 
 import Loader from '../../../app/layout/Loader';
-import { manageBonsaiRoute, createJobRoute } from '../../../app/layout/appRoutes';
+import { manageBonsaiRoute } from '../../../app/layout/appRoutes';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import { JobListItem } from '../jobs/JobListItem';
+import { JobList } from '../jobs/JobList';
 
 interface DetailParams {
   id: string;
@@ -27,21 +27,6 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
     return <h2>Bonsai not found</h2>;
   }
 
-  const renderJobs = () => {
-    const { jobs } = bonsai;
-    if (jobs && jobs.length > 0) {
-      return (
-        <ul>
-          {jobs.map((job) => (
-            <JobListItem key={job.id} {...job}></JobListItem>
-          ))}
-        </ul>
-      );
-    }
-
-    return <p>No jobs for this bonsai</p>;
-  };
-
   return (
     <div id='bonsaiDetails' className='container'>
       <h1>{bonsai.name}</h1>
@@ -49,11 +34,7 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
       <Link to={manageBonsaiRoute(bonsai.id)} className='btn btn-secondary'>
         Manage Bonsai
       </Link>
-      <h3>Jobs</h3>
-      {renderJobs()}
-      <Link to={createJobRoute(bonsai.id)} className='btn btn-secondary'>
-        Add A Job
-      </Link>
+      <JobList bonsai={bonsai} />
     </div>
   );
 };
