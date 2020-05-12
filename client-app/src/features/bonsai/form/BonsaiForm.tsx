@@ -71,7 +71,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
           formRef={register({ required: true })}
           error={errors.species && 'Species is required'}
         />
-        <input type='submit' value='Submit' className='btn btn-primary' />
+        <input type='submit' value='Submit' className='btn btn-primary' style={{ marginRight: '10px' }} />
         <button
           disabled={loading}
           onClick={bonsai.id ? () => history.push(detailBonsaiRoute(bonsai.id!)) : () => history.push(LIST_BONSAI_ROUTE)}
