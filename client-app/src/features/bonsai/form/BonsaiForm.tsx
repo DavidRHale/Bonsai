@@ -8,6 +8,7 @@ import { RouteComponentProps } from 'react-router';
 import { Input } from '../../../app/common/form/Input';
 import { detailBonsaiRoute, LIST_BONSAI_ROUTE } from '../../../app/layout/appRoutes';
 import { useRootStoreContext } from '../../../app/stores/rootStore';
+import Loader from '../../../app/layout/Loader';
 
 interface FormParams {
   id: string;
@@ -50,6 +51,10 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
   }, [loadBonsai, match.params.id]);
 
   const title = match.params.id ? 'Edit Bonsai' : 'Create Bonsai';
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className='container'>

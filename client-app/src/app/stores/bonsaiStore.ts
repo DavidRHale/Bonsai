@@ -160,6 +160,7 @@ export default class BonsaiStore {
 
       runInAction('create job', () => {
         this.submitting = false;
+        this.loadBonsai(job.bonsaiId);
       });
 
       history.push(detailBonsaiRoute(job.bonsaiId));
@@ -168,10 +169,7 @@ export default class BonsaiStore {
         this.submitting = false;
       });
 
-      console.log('hello');
       toast.error('Problem submitting data');
-      // toast.error(error.response);
-      console.log('something went wrong create job');
       console.log(error);
     }
   };
