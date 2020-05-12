@@ -1,8 +1,10 @@
 import React from 'react';
 
 const Loader = () => (
-  <div className='loader center'>
-    <i className='fa fa-spinner fa-spin fa-3x' />
+  <div className='d-flex justify-content-center' style={{ marginTop: '20%' }}>
+    <div className='spinner-border' role='status'>
+      <span className='sr-only'>Loading...</span>
+    </div>
   </div>
 );
 export default Loader;
