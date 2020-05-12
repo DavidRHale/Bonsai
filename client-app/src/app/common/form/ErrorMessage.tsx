@@ -2,18 +2,22 @@ import React from 'react';
 import { AxiosResponse } from 'axios';
 
 interface IProps {
-  error: AxiosResponse,
-  text?: string
+  error: AxiosResponse;
+  text?: string;
 }
 
 const ErrorMessage: React.FC<IProps> = ({ error, text }) => {
   return (
-    <div>
+    <div style={{ marginTop: '10px' }}>
       {error.data && Object.keys(error.data.errors).length > 0 && (
-        <ul>
-          {Object.values(error.data.errors).flat().map((err, index) => (
-            <li key={index}>{err}</li>
-          ))}
+        <ul className='list-unstyled'>
+          {Object.values(error.data.errors)
+            .flat()
+            .map((err, index) => (
+              <li key={index} className='text-danger'>
+                {err}
+              </li>
+            ))}
         </ul>
       )}
       {text}

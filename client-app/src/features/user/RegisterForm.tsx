@@ -28,19 +28,35 @@ const RegisterForm = () => {
   });
 
   return (
-    <div>
+    <div className='container'>
       <form onSubmit={onSubmit}>
         <h2>Register</h2>
-        <Input name="email" placeholder="Email" label="Email" formRef={register({ required: true })} />
-        {errors.email && 'Email is required'}
-        <Input name="username" placeholder="Username" label="Username" formRef={register({ required: true })} />
-        {errors.username && 'Username is required'}
-        <Input name="displayName" placeholder="Display Name" label="Display Name" formRef={register({ required: true })} />
-        {errors.displayName && 'Display Name is required'}
-        <Input type="password" name="password" placeholder="Password" label="Password" formRef={register({ required: true })} />
-        {errors.password && 'Password is required'}
-        <br />
-        <button type="submit">Register</button>
+        <Input name='email' placeholder='Email' label='Email' formRef={register({ required: true })} error={errors.email && 'Email is required'} />
+        <Input
+          name='username'
+          placeholder='Username'
+          label='Username'
+          formRef={register({ required: true })}
+          error={errors.username && 'Username is required'}
+        />
+        <Input
+          name='displayName'
+          placeholder='Display Name'
+          label='Display Name'
+          formRef={register({ required: true })}
+          error={errors.displayName && 'Display Name is required'}
+        />
+        <Input
+          type='password'
+          name='password'
+          placeholder='Password'
+          label='Password'
+          formRef={register({ required: true })}
+          error={errors.password && 'Password is required'}
+        />
+        <button type='submit' className='btn btn-primary'>
+          Register
+        </button>
         {submitError && <ErrorMessage error={submitError} />}
       </form>
       <p>

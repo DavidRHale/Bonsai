@@ -26,16 +26,26 @@ const LoginForm = () => {
   const clearSubmitError = () => submitError && setSubmitError('');
 
   return (
-    <div>
+    <div className='container'>
       <form onSubmit={onSubmit} onChange={clearSubmitError}>
         <h2>Log In</h2>
-        <Input name="email" placeholder="Email" label="Email" formRef={register({ required: true })} />
-        {errors.email && 'Email is required'}
-        <Input type="password" name="password" placeholder="Password" label="Password" formRef={register({ required: true })} />
-        {errors.password && 'Password is required'}
-        {submitError && 'Invalid email or password'}
-        <br />
-        <button type="submit">Log In</button>
+        <Input name='email' placeholder='Email' label='Email' formRef={register({ required: true })} error={errors.email && 'Email is required'} />
+        <Input
+          type='password'
+          name='password'
+          placeholder='Password'
+          label='Password'
+          formRef={register({ required: true })}
+          error={errors.password && 'Password is required'}
+        />
+        {submitError && (
+          <div className='text-danger' style={{ marginBottom: '16px' }}>
+            Invalid email or password
+          </div>
+        )}
+        <button type='submit' className='btn btn-primary'>
+          Log In
+        </button>
       </form>
       <p>
         Don't have an accout? Sign up <Link to={REGISTER_ROUTE}>here</Link>
