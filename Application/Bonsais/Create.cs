@@ -17,6 +17,9 @@ namespace Application.Bonsais
             public Guid Id { get; set; }
             public string Name { get; set; }
             public string Species { get; set; }
+            public int EstimatedAge { get; set; }
+            public string PotType { get; set; }
+            public string Design { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -41,6 +44,9 @@ namespace Application.Bonsais
                     Id = request.Id,
                     Name = request.Name,
                     Species = request.Species,
+                    EstimatedAge = request.EstimatedAge,
+                    PotType = request.PotType,
+                    Design = request.Design,
                     AppUser = user,
                     AppUserId = user.Id
                 };

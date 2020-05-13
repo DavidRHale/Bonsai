@@ -27,6 +27,16 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
     return <h2>Bonsai not found</h2>;
   }
 
+  const ageString = () => {
+    if (bonsai.estimatedAge === 1) {
+      return '1 year';
+    }
+
+    if (bonsai.estimatedAge > 0) {
+      return `${bonsai.estimatedAge} years`;
+    }
+  };
+
   return (
     <div id='bonsaiDetails' className='container'>
       <div className='row'>
@@ -35,10 +45,9 @@ const BonsaiDetails: React.FC<RouteComponentProps<DetailParams>> = ({ match, his
             <div className='card-body'>
               <h4 className='card-title'>{bonsai.name}</h4>
               <p className='card-text'>Species: {bonsai.species}</p>
-              <p className='card-text'>Other details: Other details go here</p>
-              <p className='card-text'>Other details: Other details go here</p>
-              <p className='card-text'>Other details: Other details go here</p>
-              <p className='card-text'>Other details: Other details go here</p>
+              <p className='card-text'>Estimated age: {ageString()}</p>
+              <p className='card-text'>Pot type: {bonsai.potType}</p>
+              <p className='card-text'>Design: {bonsai.design}</p>
               <Link to={manageBonsaiRoute(bonsai.id)} className='btn btn-primary'>
                 Manage Bonsai
               </Link>

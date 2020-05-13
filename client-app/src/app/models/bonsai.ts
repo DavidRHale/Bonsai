@@ -4,6 +4,10 @@ export interface IBonsai {
   id: string;
   name: string;
   species: string;
+  estimatedAge: number;
+  potType: string;
+  design: string;
+
   jobs?: IJob[];
 }
 
@@ -13,6 +17,9 @@ export class BonsaiFormValues implements IBonsaiFormValues {
   id?: string = '';
   name = '';
   species = '';
+  estimatedAge = undefined;
+  potType = '';
+  design = '';
 
   constructor(init?: IBonsaiFormValues) {
     Object.assign(this, init);

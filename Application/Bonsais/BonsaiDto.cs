@@ -9,6 +9,10 @@ namespace Application.Bonsais
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Species { get; set; }
+        public int EstimatedAge { get; set; }
+        public string PotType { get; set; }
+        public string Design { get; set; }
+
         public List<JobDto> Jobs { get; set; }
     }
 }

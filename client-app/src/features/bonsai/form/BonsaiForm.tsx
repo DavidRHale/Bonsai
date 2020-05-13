@@ -9,6 +9,8 @@ import { Input } from '../../../app/common/form/Input';
 import { detailBonsaiRoute, LIST_BONSAI_ROUTE } from '../../../app/layout/appRoutes';
 import { useRootStoreContext } from '../../../app/stores/rootStore';
 import Loader from '../../../app/layout/Loader';
+import { AxiosResponse } from 'axios';
+import ErrorMessage from '../../../app/common/form/ErrorMessage';
 
 interface FormParams {
   id: string;
@@ -17,21 +19,27 @@ interface FormParams {
 type FormData = {
   name: string;
   species: string;
+  estimatedAge: number;
+  potType: string;
+  design: string;
 };
 
 export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({ match, history }) => {
   const { register, handleSubmit, errors } = useForm<FormData>();
 
-  const onSubmit = handleSubmit(({ name, species }) => {
+  const onSubmit = handleSubmit(({ name, species, estimatedAge, potType, design }) => {
     if (!bonsai.id) {
       const newBonsai = {
         id: uuid(),
         name,
         species,
+        estimatedAge: +estimatedAge,
+        potType,
+        design,
       };
-      createBonsai(newBonsai);
+      createBonsai(newBonsai).catch((error) => setSubmitError(error));
     } else {
-      editBonsai({ id: bonsai.id, name, species });
+      editBonsai({ id: bonsai.id, name, species, estimatedAge: +estimatedAge, potType, design }).catch((error) => setSubmitError(error));
     }
   });
 
@@ -40,6 +48,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
 
   const [bonsai, setBonsai] = useState(new BonsaiFormValues());
   const [loading, setLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<AxiosResponse | null>(null);
 
   useEffect(() => {
     if (match.params.id) {
@@ -76,6 +85,16 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
           formRef={register({ required: true })}
           error={errors.species && 'Species is required'}
         />
+        <Input
+          name='estimatedAge'
+          placeholder='Estimated Age'
+          type='number'
+          defaultValue={bonsai.estimatedAge}
+          label='Estimated Age (Optional)'
+          formRef={register({ required: false })}
+        />
+        <Input name='potType' placeholder='Pot Type' defaultValue={bonsai.potType} label='Pot Type (Optional)' formRef={register({ required: false })} />
+        <Input name='design' placeholder='Design' defaultValue={bonsai.design} label='Design (Optional)' formRef={register({ required: false })} />
         <input type='submit' value='Submit' className='btn btn-primary' style={{ marginRight: '10px' }} />
         <button
           disabled={loading}
@@ -85,6 +104,7 @@ export const BonsaiFormComponent: React.FC<RouteComponentProps<FormParams>> = ({
         >
           Cancel
         </button>
+        {submitError && <ErrorMessage error={submitError} />}
       </form>
     </div>
   );

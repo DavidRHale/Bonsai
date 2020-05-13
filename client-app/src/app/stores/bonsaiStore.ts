@@ -105,7 +105,7 @@ export default class BonsaiStore {
       });
 
       toast.error('Problem submitting data');
-      console.log(error.response);
+      throw error;
     }
   };
 
