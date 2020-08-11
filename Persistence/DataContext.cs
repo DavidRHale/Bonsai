@@ -10,6 +10,7 @@ namespace Persistence
 
         public DbSet<Bonsai> Bonsais { get; set; }
         public DbSet<Job> Jobs { get; set; }
+        public DbSet<Photo> Photos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -29,6 +30,16 @@ namespace Persistence
                 .HasOne(j => j.Bonsai)
                 .WithMany(b => b.Jobs)
                 .HasForeignKey(j => j.BonsaiId);
+
+            builder.Entity<Photo>()
+                .HasOne(p => p.AppUser)
+                .WithMany(u => u.Photos)
+                .HasForeignKey(p => p.AppUserId);
+
+            builder.Entity<Photo>()
+                .HasOne(p => p.Bonsai)
+                .WithMany(b => b.Photos)
+                .HasForeignKey(p => p.BonsaiId);
         }
     }
 }

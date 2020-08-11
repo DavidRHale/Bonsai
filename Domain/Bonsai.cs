@@ -17,5 +17,6 @@ namespace Domain
         public virtual AppUser AppUser { get; set; }
 
         public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
     }
 }

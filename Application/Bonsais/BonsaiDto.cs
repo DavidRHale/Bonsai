@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Application.Jobs;
+using Domain;
 
 namespace Application.Bonsais
 {
@@ -14,5 +15,6 @@ namespace Application.Bonsais
         public string Design { get; set; }
 
         public List<JobDto> Jobs { get; set; }
+        public List<Photo> Photos { get; set; }
     }
 }

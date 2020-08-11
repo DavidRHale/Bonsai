@@ -1,10 +1,14 @@
 import React from 'react';
 
-const Loader = () => (
-  <div className='d-flex justify-content-center' style={{ marginTop: '20%' }}>
-    <div className='spinner-border' role='status'>
-      <span className='sr-only'>Loading...</span>
+interface IProps {
+    style?: object;
+}
+
+const Loader: React.FC<IProps> = ({ style }) => (
+    <div className='d-flex justify-content-center' style={style}>
+        <div className='d-flex flex-column'>
+            <div className='spinner-border' role='status'></div>
+        </div>
     </div>
-  </div>
 );
 export default Loader;

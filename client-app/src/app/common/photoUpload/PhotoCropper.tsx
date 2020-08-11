@@ -1,0 +1,42 @@
+import React, { useRef } from 'react';
+import Cropper from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
+
+interface IProps {
+    setImage: (image: Blob) => void;
+    imagePreview: string;
+}
+
+export const PhotoCropper: React.FC<IProps> = ({ setImage, imagePreview }) => {
+    const cropper = useRef<Cropper>(null);
+
+    const cropImage = () => {
+        if (cropper && cropper.current && typeof cropper.current.getCroppedCanvas() === 'undefined') {
+            return;
+        }
+
+        cropper &&
+            cropper.current &&
+            cropper.current.getCroppedCanvas().toBlob((blob: any) => {
+                setImage(blob);
+            }, 'image/jpeg');
+    };
+
+    return (
+        <Cropper
+            ref={cropper}
+            src={imagePreview}
+            style={{ height: 200, width: '100%' }}
+            // Cropper options
+            preview='.img-preview'
+            initialAspectRatio={16 / 9}
+            guides={false}
+            viewMode={1}
+            dragMode='move'
+            scalable={true}
+            cropBoxMovable={true}
+            cropBoxResizable={true}
+            crop={cropImage}
+        />
+    );
+};

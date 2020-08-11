@@ -8,5 +8,6 @@ namespace Domain
         public string DisplayName { get; set; }
         public virtual ICollection<Bonsai> Bonsais { get; set; }
         public virtual ICollection<Job> Jobs { get; set; }
+        public virtual ICollection<Photo> Photos { get; set; }
     }
 }

@@ -10,167 +10,200 @@ import { RootStore } from './rootStore';
 import { IJob } from '../models/job';
 
 export default class BonsaiStore {
-  rootStore: RootStore;
+    rootStore: RootStore;
 
-  constructor(rootStore: RootStore) {
-    this.rootStore = rootStore;
-  }
-
-  @observable bonsaiRegistry = new Map();
-  @observable bonsai: IBonsai | null = null;
-  @observable loadingInitial = false;
-  @observable submitting = false;
-  @observable target = '';
-
-  @computed get allBonsais() {
-    return Array.from(this.bonsaiRegistry.values());
-  }
-
-  @action loadBonsais = async () => {
-    this.loadingInitial = true;
-
-    try {
-      const bonsais = await agent.Bonsai.list();
-
-      runInAction('load bonsais', () => {
-        bonsais.forEach((bonsai) => {
-          this.bonsaiRegistry.set(bonsai.id, bonsai);
-        });
-        this.loadingInitial = false;
-      });
-    } catch (error) {
-      console.log(error);
-      runInAction('load bonsais error', () => {
-        this.loadingInitial = false;
-      });
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
     }
-  };
 
-  @action loadBonsai = async (id: string) => {
-    let bonsai = this.getBonsai(id);
+    @observable bonsaiRegistry = new Map();
+    @observable bonsai: IBonsai | null = null;
+    @observable loadingInitial = false;
+    @observable submitting = false;
+    @observable target = '';
+    @observable uploadingPhoto = false;
 
-    if (bonsai) {
-      this.bonsai = bonsai;
-      return bonsai; // return non-observable to prevent excessive calls of useEffect
-    } else {
-      this.loadingInitial = true;
-
-      try {
-        bonsai = await agent.Bonsai.details(id);
-        runInAction('load bonsai', () => {
-          this.bonsai = bonsai;
-          this.loadingInitial = false;
-        });
-        return bonsai; // return non-observable to prevent excessive calls of useEffect
-      } catch (error) {
-        runInAction('load bonsai error', () => {
-          this.loadingInitial = false;
-        });
-        console.log(error);
-      }
+    @computed get allBonsais() {
+        return Array.from(this.bonsaiRegistry.values());
     }
-  };
 
-  getBonsai = (id: string) => {
-    return this.bonsaiRegistry.get(id);
-  };
+    @action loadBonsais = async () => {
+        this.loadingInitial = true;
 
-  @action clearBonsai = () => {
-    this.bonsai = null;
-  };
+        try {
+            const bonsais = await agent.Bonsai.list();
 
-  @action clearBonsais = () => {
-    this.bonsaiRegistry = new Map();
-  };
+            runInAction('load bonsais', () => {
+                bonsais.forEach((bonsai) => {
+                    this.bonsaiRegistry.set(bonsai.id, bonsai);
+                });
+                this.loadingInitial = false;
+            });
+        } catch (error) {
+            console.log(error);
+            runInAction('load bonsais error', () => {
+                this.loadingInitial = false;
+            });
+        }
+    };
 
-  @action selectBonsai = (id: string) => {
-    this.bonsai = this.bonsaiRegistry.get(id);
-  };
+    @action loadBonsai = async (id: string) => {
+        let bonsai = this.getBonsai(id);
 
-  @action createBonsai = async (bonsai: IBonsai) => {
-    this.submitting = true;
+        if (bonsai) {
+            this.bonsai = bonsai;
+            return bonsai; // return non-observable to prevent excessive calls of useEffect
+        } else {
+            this.loadingInitial = true;
 
-    try {
-      await agent.Bonsai.create(bonsai);
+            try {
+                bonsai = await agent.Bonsai.details(id);
+                runInAction('load bonsai', () => {
+                    this.bonsai = bonsai;
+                    this.loadingInitial = false;
+                });
+                return bonsai; // return non-observable to prevent excessive calls of useEffect
+            } catch (error) {
+                runInAction('load bonsai error', () => {
+                    this.loadingInitial = false;
+                });
+                console.log(error);
+            }
+        }
+    };
 
-      runInAction('create bonsai', () => {
-        this.bonsaiRegistry.set(bonsai.id, bonsai);
-        this.submitting = false;
-      });
+    getBonsai = (id: string) => {
+        return this.bonsaiRegistry.get(id);
+    };
 
-      history.push(detailBonsaiRoute(bonsai.id));
-    } catch (error) {
-      runInAction('create bonsai error', () => {
-        this.submitting = false;
-      });
+    @action clearBonsai = () => {
+        this.bonsai = null;
+    };
 
-      toast.error('Problem submitting data');
-      throw error;
-    }
-  };
+    @action clearBonsais = () => {
+        this.bonsaiRegistry = new Map();
+    };
 
-  @action editBonsai = async (bonsai: IBonsai) => {
-    this.submitting = true;
-    try {
-      await agent.Bonsai.update(bonsai);
+    @action selectBonsai = (id: string) => {
+        this.bonsai = this.bonsaiRegistry.get(id);
+    };
 
-      runInAction('edit bonsai', () => {
-        this.bonsaiRegistry.set(bonsai.id, bonsai);
-        this.bonsai = bonsai;
-        this.submitting = false;
-      });
+    @action createBonsai = async (bonsai: IBonsai) => {
+        this.submitting = true;
 
-      history.push(detailBonsaiRoute(bonsai.id));
-    } catch (error) {
-      runInAction('edit bonsai error', () => {
-        this.submitting = false;
-      });
+        try {
+            await agent.Bonsai.create(bonsai);
 
-      toast.error('Problem submitting data');
-      console.log(error);
-    }
-  };
+            runInAction('create bonsai', () => {
+                this.bonsaiRegistry.set(bonsai.id, bonsai);
+                this.submitting = false;
+            });
 
-  @action deleteBonsai = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
-    this.submitting = true;
-    this.target = event.currentTarget.name;
+            history.push(detailBonsaiRoute(bonsai.id));
+        } catch (error) {
+            runInAction('create bonsai error', () => {
+                this.submitting = false;
+            });
 
-    try {
-      await agent.Bonsai.delete(id);
+            toast.error('Problem submitting data');
+            throw error;
+        }
+    };
 
-      runInAction('delete bonsai', () => {
-        this.bonsaiRegistry.delete(id);
-        this.submitting = false;
-        this.target = '';
-      });
-    } catch (error) {
-      runInAction('delete bonsai error', () => {
-        this.submitting = false;
-        this.target = '';
-      });
-      console.log(error);
-    }
-  };
+    @action editBonsai = async (bonsai: IBonsai) => {
+        this.submitting = true;
+        try {
+            await agent.Bonsai.update(bonsai);
 
-  @action createJob = async (job: IJob) => {
-    this.submitting = true;
+            runInAction('edit bonsai', () => {
+                this.bonsaiRegistry.set(bonsai.id, bonsai);
+                this.bonsai = bonsai;
+                this.submitting = false;
+            });
 
-    try {
-      await agent.Job.create(job);
+            history.push(detailBonsaiRoute(bonsai.id));
+        } catch (error) {
+            runInAction('edit bonsai error', () => {
+                this.submitting = false;
+            });
 
-      runInAction('create job', () => {
-        this.submitting = false;
-        this.loadBonsai(job.bonsaiId);
-      });
+            toast.error('Problem submitting data');
+            console.log(error);
+        }
+    };
 
-      history.push(detailBonsaiRoute(job.bonsaiId));
-    } catch (error) {
-      runInAction('create job error', () => {
-        this.submitting = false;
-      });
+    @action deleteBonsai = async (event: SyntheticEvent<HTMLButtonElement>, id: string) => {
+        this.submitting = true;
+        this.target = event.currentTarget.name;
 
-      toast.error('Problem submitting data');
-      console.log(error);
-    }
-  };
+        try {
+            await agent.Bonsai.delete(id);
+
+            runInAction('delete bonsai', () => {
+                this.bonsaiRegistry.delete(id);
+                this.submitting = false;
+                this.target = '';
+            });
+        } catch (error) {
+            runInAction('delete bonsai error', () => {
+                this.submitting = false;
+                this.target = '';
+            });
+            console.log(error);
+        }
+    };
+
+    @action createJob = async (job: IJob) => {
+        this.submitting = true;
+
+        try {
+            await agent.Job.create(job);
+
+            runInAction('create job', () => {
+                this.submitting = false;
+                this.loadBonsai(job.bonsaiId);
+            });
+
+            history.push(detailBonsaiRoute(job.bonsaiId));
+        } catch (error) {
+            runInAction('create job error', () => {
+                this.submitting = false;
+            });
+
+            toast.error('Problem submitting data');
+            console.log(error);
+        }
+    };
+
+    @action uploadPhoto = async (file: Blob) => {
+        this.uploadingPhoto = true;
+
+        try {
+            if (this.bonsai) {
+                const photo = await agent.Bonsai.uploadPhoto(file, this.bonsai.id);
+                runInAction(() => {
+                    if (this.bonsai) {
+                        if (this.bonsai.photos) {
+                            this.bonsai.photos.push(photo);
+                        } else {
+                            this.bonsai.photos = [photo];
+                        }
+                    }
+
+                    this.uploadingPhoto = false;
+                });
+            } else {
+                toast.error('Problem uploading photo - no associated bonsai found');
+                runInAction(() => {
+                    this.uploadingPhoto = false;
+                });
+            }
+        } catch (error) {
+            console.log(error);
+            toast.error('Problem uploading photo');
+            runInAction(() => {
+                this.uploadingPhoto = false;
+            });
+        }
+    };
 }
