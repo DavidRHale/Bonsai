@@ -12,7 +12,7 @@ const BonsaiListItem: React.FC<{ bonsai: IBonsai }> = ({ bonsai }) => {
 
     return (
         <li id='bonsaiListItem' className='list-group-item card mb-3'>
-            <div className='row card-body' style={{ marginBottom: '500px' }}>
+            <div className='row card-body'>
                 <div className='col'>
                     <h3 className='card-title'>{bonsai.name}</h3>
                     <p className='card-text'>{bonsai.species}</p>
