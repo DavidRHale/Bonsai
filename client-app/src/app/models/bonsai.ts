@@ -1,6 +1,11 @@
 import { IJob } from './job';
 import { IPhoto } from './photo';
 
+export interface IBonsaiEnvelope {
+    bonsais: IBonsai[];
+    bonsaiCount: number;
+}
+
 export interface IBonsai {
     id: string;
     name: string;

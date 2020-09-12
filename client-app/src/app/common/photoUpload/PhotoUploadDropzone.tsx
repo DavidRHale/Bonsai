@@ -19,15 +19,18 @@ const dropzoneActive = {
 };
 
 export const PhotoUploadDropzone: React.FC<IProps> = ({ setFiles }) => {
-    const onDrop = useCallback((acceptedFiles) => {
-        setFiles(
-            acceptedFiles.map((file: object) => {
-                return Object.assign(file, {
-                    preview: URL.createObjectURL(file),
-                });
-            })
-        );
-    }, []);
+    const onDrop = useCallback(
+        (acceptedFiles) => {
+            setFiles(
+                acceptedFiles.map((file: object) => {
+                    return Object.assign(file, {
+                        preview: URL.createObjectURL(file),
+                    });
+                })
+            );
+        },
+        [setFiles]
+    );
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
     return (

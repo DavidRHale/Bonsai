@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 
-import { IBonsai } from '../models/bonsai';
+import { IBonsai, IBonsaiEnvelope } from '../models/bonsai';
 import { history } from '../..';
 import { NOT_FOUND_ROUTE } from '../layout/appRoutes';
 import { IUser, IUserFormValues } from '../models/user';
@@ -60,7 +60,8 @@ const requests = {
 };
 
 const Bonsai = {
-    list: (): Promise<IBonsai[]> => requests.get('/bonsais'),
+    list: (limit?: number, page?: number): Promise<IBonsaiEnvelope> =>
+        requests.get(`/bonsais?limit=${limit}&offset=${page ? page * limit! : 0}`), // TODO this function should take the offset not the page
     details: (id: string) => requests.get(`/bonsais/${id}`),
     create: (bonsai: IBonsai) => requests.post('/bonsais', bonsai),
     update: (bonsai: IBonsai) => requests.put(`/bonsais/${bonsai.id}`, bonsai),
@@ -72,6 +73,7 @@ const Bonsai = {
 
         return requests.postForm(`/photos`, formData);
     },
+    deletePhoto: (id: string) => requests.delete(`/photos/${id}`),
 };
 
 const Job = {

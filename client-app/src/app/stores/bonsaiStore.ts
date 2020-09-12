@@ -8,6 +8,9 @@ import { history } from '../..';
 import { toast } from 'react-toastify';
 import { RootStore } from './rootStore';
 import { IJob } from '../models/job';
+import { IPhoto } from '../models/photo';
+
+const LIMIT = 2;
 
 export default class BonsaiStore {
     rootStore: RootStore;
@@ -22,6 +25,17 @@ export default class BonsaiStore {
     @observable submitting = false;
     @observable target = '';
     @observable uploadingPhoto = false;
+    @observable deletingPhoto = false;
+    @observable bonsaiCount = 0;
+    @observable page = 0;
+
+    @computed get totalPages() {
+        return Math.ceil(this.bonsaiCount / LIMIT);
+    }
+
+    @action setPage = (page: number) => {
+        this.page = page;
+    };
 
     @computed get allBonsais() {
         return Array.from(this.bonsaiRegistry.values());
@@ -31,12 +45,13 @@ export default class BonsaiStore {
         this.loadingInitial = true;
 
         try {
-            const bonsais = await agent.Bonsai.list();
+            const { bonsais, bonsaiCount } = await agent.Bonsai.list(LIMIT, this.page);
 
             runInAction('load bonsais', () => {
                 bonsais.forEach((bonsai) => {
                     this.bonsaiRegistry.set(bonsai.id, bonsai);
                 });
+                this.bonsaiCount = bonsaiCount;
                 this.loadingInitial = false;
             });
         } catch (error) {
@@ -204,6 +219,21 @@ export default class BonsaiStore {
             runInAction(() => {
                 this.uploadingPhoto = false;
             });
+        }
+    };
+
+    @action deletePhoto = async (photo: IPhoto) => {
+        this.deletingPhoto = true;
+        try {
+            await agent.Bonsai.deletePhoto(photo.id);
+            runInAction(() => {
+                this.bonsai!.photos = this.bonsai!.photos!.filter((p) => p.id !== photo.id);
+                this.deletingPhoto = false;
+            });
+        } catch (error) {
+            console.log(error);
+            toast.error('Problem deleting photo');
+            runInAction(() => (this.deletingPhoto = true));
         }
     };
 }

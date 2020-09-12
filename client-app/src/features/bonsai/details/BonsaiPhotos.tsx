@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, Fragment } from 'react';
 
 import { IPhoto } from '../../../app/models/photo';
 import { PhotoUpload } from '../../../app/common/photoUpload/PhotoUpload';
 import { RootStoreContext } from '../../../app/stores/rootStore';
-import Loader from '../../../app/layout/Loader';
 import { observer } from 'mobx-react-lite';
+import Loader from '../../../app/layout/Loader';
 
 interface IProps {
     photos?: IPhoto[];
@@ -12,9 +12,11 @@ interface IProps {
 
 const BonsaiPhotosComponent: React.FC<IProps> = ({ photos }) => {
     const rootStore = useContext(RootStoreContext);
-    const { uploadingPhoto, uploadPhoto } = rootStore.bonsaiStore;
+    const { uploadingPhoto, uploadPhoto, deletingPhoto, deletePhoto } = rootStore.bonsaiStore;
 
     const [addPhotoMode, setAddPhotoMode] = useState(false);
+
+    const [deleteTarget, setDeleteTarget] = useState('');
 
     const handleUploadPhoto = (photo: Blob) => {
         uploadPhoto(photo).then(() => setAddPhotoMode(false));
@@ -37,7 +39,29 @@ const BonsaiPhotosComponent: React.FC<IProps> = ({ photos }) => {
                         {photos &&
                             photos.map((photo) => (
                                 <div key={photo.id} className='col-lg-3 col-md-4 col-6 mb-3'>
-                                    <img className='img-fluid img-thumbnail' src={photo.url} alt='bonsai' />
+                                    {deletingPhoto && deleteTarget === photo.id ? (
+                                        <Loader style={{ marginTop: '100px' }} />
+                                    ) : (
+                                        <Fragment>
+                                            <img className='img-fluid img-thumbnail' src={photo.url} alt='bonsai' />
+                                            <button
+                                                onClick={() => {
+                                                    deletePhoto(photo);
+                                                    setDeleteTarget(photo.id);
+                                                }}
+                                                className='btn btn-danger'
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '15px',
+                                                    right: '25px',
+                                                    height: '40px',
+                                                    width: '40px',
+                                                }}
+                                            >
+                                                <i className='fa fa-trash'></i>
+                                            </button>
+                                        </Fragment>
+                                    )}
                                 </div>
                             ))}
                     </div>
